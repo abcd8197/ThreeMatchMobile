@@ -1,0 +1,16 @@
+{
+    "name": "Domain",
+    "rootNamespace": "ThreeMatch",
+    "references": [
+        "GUID:86fc7ec12e22f8344b3b275fa35a73ff"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
