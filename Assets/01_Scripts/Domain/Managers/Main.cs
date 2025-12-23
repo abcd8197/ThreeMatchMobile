@@ -5,16 +5,11 @@ namespace ThreeMatch
 {
     public class Main : IDisposable
     {
+        private static readonly Lazy<Main> _lazy = new(() => new Main());
         public static Main Instance = _lazy.Value;
-        private static readonly Lazy<Main> _lazy = new Lazy<Main>(() => new Main());
         private readonly Dictionary<Type, IManager> _globalManagers = new();
 
-        private Main()
-        {
-            Initialize();
-        }
-
-        private void Initialize()
+        public void Initialize()
         {
 
         }
@@ -47,7 +42,16 @@ namespace ThreeMatch
             }
         }
 
+        public T GetManager<T>() where T : IManager
+        {
+            var type = typeof(T);
+            if (_globalManagers.TryGetValue(type, out var manager))
+            {
+                return (T)manager;
+            }
 
+            throw new Exception($"Manager of type {type} is not registered.");
+        }
         public void Dispose()
         {
             foreach (var manager in _globalManagers.Values)

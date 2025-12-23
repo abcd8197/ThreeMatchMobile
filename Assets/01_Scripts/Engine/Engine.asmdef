@@ -1,0 +1,17 @@
+{
+    "name": "Engine",
+    "rootNamespace": "ThreeMatch",
+    "references": [
+        "GUID:86fc7ec12e22f8344b3b275fa35a73ff",
+        "GUID:deaa2c4daa937d444a6cea27f1588598"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
