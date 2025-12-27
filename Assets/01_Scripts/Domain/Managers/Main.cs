@@ -58,6 +58,8 @@ namespace ThreeMatch
             {
                 manager?.Dispose();
             }
+
+            _globalManagers?.Clear();
         }
     }
 }

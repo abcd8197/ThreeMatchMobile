@@ -33,6 +33,8 @@ namespace ThreeMatch
             {
                 module?.Dispose();
             }
+
+            _registeredModules?.Clear();
         }
 
         public void InitializeSaveData()
