@@ -3,7 +3,11 @@
     "rootNamespace": "ThreeMatch",
     "references": [
         "GUID:86fc7ec12e22f8344b3b275fa35a73ff",
-        "GUID:deaa2c4daa937d444a6cea27f1588598"
+        "GUID:deaa2c4daa937d444a6cea27f1588598",
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:c4dd5752c703fef4ba99efa5d4f146f4",
+        "GUID:536993f12b814234a8f1d38fa0a1f35c",
+        "GUID:84651a3751eca9349aac36a66bba901b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

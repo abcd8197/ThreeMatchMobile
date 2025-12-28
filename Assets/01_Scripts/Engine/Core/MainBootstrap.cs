@@ -12,6 +12,8 @@ namespace ThreeMatch
             CreateSaveManager(main);
 
             main.GetManager<SaveManager>().InitializeSaveData();
+
+            CreateAssetManager(main);
         }
 
         private void CreateSaveManager(Main main)
@@ -26,6 +28,16 @@ namespace ThreeMatch
 
             var saveManager = new SaveManager(saveData, saveService);
             main.RegisterManager(saveManager);
+        }
+
+        private void CreateAssetManager(Main main)
+        {
+            IAssetService assetService = null;
+#if UNITY_EDITOR
+            assetService = new AddressableAssetService();
+#endif
+            var assetManager = new AssetManager(assetService);
+            main.RegisterManager(assetManager);
         }
     }
 }
