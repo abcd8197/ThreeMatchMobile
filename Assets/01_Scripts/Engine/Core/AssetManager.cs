@@ -15,13 +15,7 @@ namespace ThreeMatch
 
         public void Dispose()
         {
-            foreach (var asset in _loadedAssets.Values)
-            {
-                if (asset != null)
-                    _assetService.ReleaseAsset(asset);
-            }
 
-            _loadedAssets?.Clear();
         }
     }
 }

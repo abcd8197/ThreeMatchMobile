@@ -1,6 +1,6 @@
 namespace ThreeMatch
 {
-    public enum AssetGroup
+    public enum AssetType
     {
         Audio,
         Prefab,
