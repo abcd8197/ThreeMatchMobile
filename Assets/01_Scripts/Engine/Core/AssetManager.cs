@@ -6,7 +6,7 @@ namespace ThreeMatch
     public class AssetManager : IManager
     {
         private IAssetService _assetService;
-        private readonly Dictionary<string, Object> _loadedAssets = new();
+        private readonly Dictionary<BundleGroup, Dictionary<AssetType, Object>> _assetCache = new();
 
         public AssetManager(IAssetService assetService)
         {
@@ -17,5 +17,6 @@ namespace ThreeMatch
         {
 
         }
+
     }
 }

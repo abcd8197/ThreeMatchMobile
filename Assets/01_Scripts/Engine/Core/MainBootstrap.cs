@@ -34,7 +34,7 @@ namespace ThreeMatch
         {
             IAssetService assetService = null;
 #if UNITY_EDITOR
-            assetService = new AddressableAssetService();
+            //assetService = new AddressableAssetService();
 #endif
             var assetManager = new AssetManager(assetService);
             main.RegisterManager(assetManager);
