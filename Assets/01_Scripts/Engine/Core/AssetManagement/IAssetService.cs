@@ -14,8 +14,5 @@ namespace ThreeMatch
         public Task PreparePackAsync(BundleGroup pack, IProgress<float> progress = null, CancellationToken ct = default);
 
         public void ReleasePack(BundleGroup pack);
-
-        public Task<UnityEngine.Object> InstantiateAsync(string key, object parent);
-        public void ReleaseInstance(UnityEngine.Object instance);
     }
 }

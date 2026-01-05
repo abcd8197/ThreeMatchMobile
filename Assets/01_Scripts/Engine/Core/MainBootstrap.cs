@@ -36,7 +36,7 @@ namespace ThreeMatch
 #if UNITY_EDITOR
             //assetService = new AddressableAssetService();
 #endif
-            var assetManager = new AssetManager(assetService);
+            var assetManager = new AssetManager(assetService, null);
             main.RegisterManager(assetManager);
         }
     }
