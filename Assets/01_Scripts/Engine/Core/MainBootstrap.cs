@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ThreeMatch
@@ -14,6 +15,7 @@ namespace ThreeMatch
             main.GetManager<SaveManager>().InitializeSaveData();
 
             CreateAssetManager(main);
+            main.RegisterManager(new UIManager(main.GetManager<AssetManager>()));
         }
 
         private void CreateSaveManager(Main main)
@@ -28,15 +30,18 @@ namespace ThreeMatch
 
             var saveManager = new SaveManager(saveData, saveService);
             main.RegisterManager(saveManager);
+
         }
 
         private void CreateAssetManager(Main main)
         {
             IAssetService assetService = null;
+            List<string> requiredPacks = new();
 #if UNITY_EDITOR
-            //assetService = new AddressableAssetService();
+            assetService = new AddressableAssetService();
+            requiredPacks.Add("defaultasset");
 #endif
-            var assetManager = new AssetManager(assetService, null);
+            var assetManager = new AssetManager(assetService, requiredPacks);
             main.RegisterManager(assetManager);
         }
     }

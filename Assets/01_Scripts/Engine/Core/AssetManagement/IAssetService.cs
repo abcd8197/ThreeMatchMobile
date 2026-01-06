@@ -1,18 +1,14 @@
-using UnityEngine;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ThreeMatch
 {
     public interface IAssetService : IDisposable
     {
-        public bool IsInitialized { get; }
+        public void LoadAssetPackAsync(IEnumerable<BundleGroup> bundleList, Action completeAction = null);
+        public void ReleaseAssetPack(IEnumerable<BundleGroup> bundleList);
 
-        public Task InitializeAsync(CancellationToken ct = default);
-
-        public Task PreparePackAsync(BundleGroup pack, IProgress<float> progress = null, CancellationToken ct = default);
-
-        public void ReleasePack(BundleGroup pack);
+        public T GetAsset<T>(BundleGroup pack, string assetKey) where T : UnityEngine.Object;
+        public void ReleaseAsset(BundleGroup pack, string assetKey);
     }
 }

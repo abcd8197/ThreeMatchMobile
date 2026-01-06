@@ -2,7 +2,6 @@ namespace ThreeMatch
 {
     public enum PopupType
     {
-        Loading,
-
+        LoadingPopup,
     }
 }

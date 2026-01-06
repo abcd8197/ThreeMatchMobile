@@ -2,7 +2,7 @@ namespace ThreeMatch
 {
     public enum BundleGroup
     {
-        Default,
-        DLC_1,
+        defaultasset,
+        dlc_1,
     }
 }
