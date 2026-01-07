@@ -42,8 +42,9 @@ namespace ThreeMatch
                 }
                 else
                 {
-                    _assetManager.ReleaseInstance(popupType.GetBundleGroup(), popupType.ToString());
-                    GameObject.Destroy(popupInstance.gameObject);
+                    _assetManager.ReleaseInstance(popupType.GetBundleGroup(), popupType.ToString(), popupInstance.gameObject);
+                    if (popupInstance.gameObject != null)
+                        GameObject.Destroy(popupInstance.gameObject);
                 }
                 _activePopups.Remove(popupType);
             }

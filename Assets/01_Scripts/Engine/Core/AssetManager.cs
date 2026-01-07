@@ -9,6 +9,8 @@ namespace ThreeMatch
     {
         private IAssetService _assetService;
         private readonly List<BundleGroup> _requiredPacks = new();
+        public float progress { get; private set; } = 0f;
+        public bool AssetLoadCompleted { get; private set; } = false;
 
         public AssetManager(IAssetService assetService, List<string> requirePacks)
         {
@@ -31,7 +33,8 @@ namespace ThreeMatch
 
             // 중복 제거
             _requiredPacks = _requiredPacks.Distinct().ToList();
-            _assetService.LoadAssetPackAsync(_requiredPacks);
+            progress = 0f;
+            _assetService.LoadAssetPackAsync(_requiredPacks, SetProgress, LoadCompleteCallback);
         }
 
         public void Dispose()
@@ -46,9 +49,19 @@ namespace ThreeMatch
             return _assetService.GetAsset<T>(bundleGroup, assetName);
         }
 
-        public void ReleaseInstance(BundleGroup group, string assetName)
+        public void ReleaseInstance(BundleGroup group, string assetName, GameObject go)
         {
-            _assetService.ReleaseAsset(group, assetName);
+            _assetService.ReleasePrefab(group, assetName, go);
+        }
+
+        private void SetProgress(float value)
+        {
+            progress = Mathf.Clamp01(value);
+        }
+
+        private void LoadCompleteCallback()
+        {
+            AssetLoadCompleted = true;
         }
     }
 }

@@ -26,8 +26,7 @@ namespace ThreeMatch
 
             void CreateTitleCanvas()
             {
-                var titleCanvas = Instantiate(Resources.Load<GameObject>("TitleScene/Prefab/UI/Popup/TitleCanvas"), transform).GetComponent<TitleCanvas>();
-                titleCanvas.LoadingEnabled(true);
+                Instantiate(Resources.Load<GameObject>("TitleScene/Prefab/UI/Popup/TitleCanvas"), transform).GetComponent<TitleCanvas>();
             }
         }
     }
