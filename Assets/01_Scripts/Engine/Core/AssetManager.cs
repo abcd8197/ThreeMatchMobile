@@ -44,15 +44,30 @@ namespace ThreeMatch
             _requiredPacks.Clear();
         }
 
-        public T GetNewInstance<T>(BundleGroup bundleGroup, string assetName, Transform parent) where T : UnityEngine.Object
-        {
-            return _assetService.GetAsset<T>(bundleGroup, assetName);
-        }
+        #region ## Get Methods ##
+        /// <summary> Return Original Asset. Not Instantiated</summary>
+        public T GetAsset<T>(BundleGroup pack, string assetName) where T : UnityEngine.Object
+            => _assetService.GetAsset<T>(pack, assetName);
 
-        public void ReleaseInstance(BundleGroup group, string assetName, GameObject go)
-        {
-            _assetService.ReleasePrefab(group, assetName, go);
-        }
+        /// <summary>Return new Prefab Instance that Instantiated</summary>
+        public GameObject GetPrefabInstance(BundleGroup pack, string assetKey, bool worldPositionStay = false, Transform parent = null)
+            => _assetService.GetPrefabInstance(pack, assetKey, worldPositionStay, parent);
+        
+        /// <summary>Return Component of the Instantiated Prefab's GameObject</summary>
+        public T GetInstantiateComponent<T>(BundleGroup pack, string assetKey, bool worldPositionStay = false, Transform parent = null) where T : Component
+            => _assetService.GetInstantiateComponent<T>(pack, assetKey, worldPositionStay, parent);
+        #endregion
+
+        #region ## Release Methods ##
+        /// <summary>Release Prefab Instance that instantiated</summary>
+        public void ReleasePrefab(BundleGroup pack, string assetName, GameObject go)
+            => _assetService.ReleasePrefab(pack, assetName, go);
+
+        /// <summary>Release Component of the Instatiated Prefab</summary>
+        public void ReleaseInstantiatedComponent<T>(BundleGroup pack, string assetKey, T asset) where T : Component
+            => _assetService.ReleaseInstantiatedComponent<T>(pack, assetKey, asset);
+
+        #endregion
 
         private void SetProgress(float value)
         {

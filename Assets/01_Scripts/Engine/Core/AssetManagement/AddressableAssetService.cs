@@ -99,28 +99,29 @@ namespace ThreeMatch
                 await Task.WhenAll(workers);
                 success = true;
 
-                Task WorkerAsync()
+                // async가 없이 return Task.Run으로 감싸서 사용했더니
+                // C#의 Thread Pool로 넘어가 Unity Addressable 동작을 하지 않는 것을 수정
+                // Task.Run으로 감싼것을 없애고 async 키워드를 추가하여
+                // Unity의 메인 스레드에서 동작하도록 "UnitySynchronizationContext"가 덮어쓸수있도록 수정
+                async Task WorkerAsync()
                 {
-                    return Task.Run(async () =>
+                    while (true)
                     {
-                        while (true)
+                        ct.ThrowIfCancellationRequested();
+
+                        (BundleGroup, IResourceLocation) item;
+                        lock (qLock)
                         {
-                            ct.ThrowIfCancellationRequested();
-
-                            (BundleGroup, IResourceLocation) item;
-                            lock (qLock)
-                            {
-                                if (queue.Count == 0)
-                                    break;
-                                item = queue.Dequeue();
-                            }
-
-                            await LoadAssetAsync(item.Item1, item.Item2, ct);
-
-                            int done = Interlocked.Increment(ref loadedAssetCount);
-                            progressAction?.Invoke((float)done / totalAssetCount);
+                            if (queue.Count == 0)
+                                break;
+                            item = queue.Dequeue();
                         }
-                    }, ct);
+
+                        await LoadAssetAsync(item.Item1, item.Item2, ct);
+
+                        int done = Interlocked.Increment(ref loadedAssetCount);
+                        progressAction?.Invoke((float)done / totalAssetCount);
+                    }
                 }
             }
             finally
@@ -138,6 +139,7 @@ namespace ThreeMatch
                 }
             }
         }
+
         private async Task LoadAssetAsync(BundleGroup pack, IResourceLocation location, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
