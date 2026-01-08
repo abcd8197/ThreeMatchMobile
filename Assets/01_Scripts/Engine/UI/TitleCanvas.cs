@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using UniRx;
 
 namespace ThreeMatch
 {
@@ -22,28 +23,65 @@ namespace ThreeMatch
 
         [Header("Login Panel")]
         public GameObject LoginPanel;
+        public UIButton btn_GuestLogin;
         public UIButton btn_AppleLogin;
         public UIButton btn_GoogleLogin;
 
         private Coroutine _loadingTextCoroutine;
         private Coroutine _loadingProgressCoroutine;
+        private Coroutine _loginCoroutine;
 
         private void Start()
         {
             LoadingEnabled(true);
             StartLoadingProgress();
             LoginPanel.SetActive(false);
+            SetButtonMethods();
         }
 
         private void OnDisable()
         {
             LoadingEnabled(false);
+
+            if (_loadingProgressCoroutine != null)
+                StopCoroutine(_loadingProgressCoroutine);
+            if (_loginCoroutine != null)
+                StopCoroutine(_loginCoroutine);
         }
+
+        #region ## Login Methods ##
+        private void SetButtonMethods()
+        {
+            btn_GuestLogin.onClick.AsObservable().Subscribe(x => ClickLoginButton(AuthType.Guest)).AddTo(this);
+            btn_AppleLogin.onClick.AsObservable().Subscribe(x => ClickLoginButton(AuthType.Apple)).AddTo(this);
+            btn_GoogleLogin.onClick.AsObservable().Subscribe(x => ClickLoginButton(AuthType.Google)).AddTo(this);
+        }
+
+        private void ClickLoginButton(AuthType authType)
+        {
+            Main.Instance.GetManager<AuthManager>().Login(authType);
+            _loginCoroutine = StartCoroutine(WaitForAuth());
+        }
+
+        private IEnumerator WaitForAuth()
+        {
+            var authManager = Main.Instance.GetManager<AuthManager>();
+            while (!authManager.Authenticated)
+            {
+                yield return null;
+            }
+
+            if (authManager.CurrentType != AuthType.None)
+                LoginPanel.SetActive(false);
+
+            _loginCoroutine = null;
+        }
+        #endregion
 
         #region ## Loading Panel Methods ##
         public void LoadingEnabled(bool enalbed)
         {
-            LoginPanel.SetActive(enalbed);
+            LoadingPanel.SetActive(enalbed);
 
             if (enalbed)
             {
@@ -62,6 +100,9 @@ namespace ThreeMatch
         private IEnumerator LoadingTextDirection()
         {
             const string bseText = "데이터 로딩중";
+            const float DotInterval = 0.5f;
+
+            float cnt = 0f;
             var assetManager = Main.Instance.GetManager<AssetManager>();
             byte dotNumber = 3;
 
@@ -70,13 +111,22 @@ namespace ThreeMatch
                 txt_Loading.text = bseText;
                 for (int i = 0; i < dotNumber; i++)
                 {
-                    yield return new WaitForSeconds(0.5f);
+                    while (cnt < DotInterval)
+                    {
+                        cnt += Time.unscaledDeltaTime;
+
+                        if (assetManager.AssetLoadCompleted)
+                            break;
+
+                        yield return null;
+                    }
+                    cnt = 0f;
                     txt_Loading.text += ".";
                 }
             }
 
-            LoginPanel.SetActive(true);
             this.LoadingEnabled(false);
+            LoginPanel.SetActive(true);
         }
         #endregion
 
@@ -93,15 +143,19 @@ namespace ThreeMatch
             while (!assetManager.AssetLoadCompleted)
             {
                 float progress = assetManager.progress * 100f;
+                int bundleCount = assetManager.BundleCount;
+                int loadedBundleCount = assetManager.LoadedBundleCount;
+
                 ProgressBarFill.fillAmount = assetManager.progress;
-                txt_Progress.text = $"{progress:0}%";
-                txt_InnerProgress.text = $"데이터 로딩중... {progress:0}%";
+                txt_Progress.text = $"{loadedBundleCount}/{bundleCount}%";
+                txt_InnerProgress.text = $"{progress:0}%";
                 yield return null;
             }
 
             ProgressBarFill.fillAmount = 1f;
             txt_Progress.text = $"100%";
             ProgressBarPanel.SetActive(false);
+            _loadingProgressCoroutine = null;
         }
         #endregion
     }

@@ -8,7 +8,7 @@ namespace ThreeMatch
 {
     public interface IAssetService : IDisposable
     {
-        public Task LoadAssetPackAsync(IEnumerable<BundleGroup> bundleList, Action<float> progressAction = null, Action completeAction = null, CancellationToken ct = default);
+        public Task LoadAssetPackAsync(IEnumerable<BundleGroup> bundleList, Action<int, float> progressAction = null, Action completeAction = null, CancellationToken ct = default);
         public void ReleaseAssetPack(IEnumerable<BundleGroup> bundleList);
 
         public T GetAsset<T>(BundleGroup pack, string assetKey) where T : UnityEngine.Object;

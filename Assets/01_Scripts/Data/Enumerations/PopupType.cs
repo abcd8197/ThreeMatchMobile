@@ -2,6 +2,7 @@ namespace ThreeMatch
 {
     public enum PopupType
     {
-        LoadingPopup,
+        None,
+        SceneChangePopup,
     }
 }

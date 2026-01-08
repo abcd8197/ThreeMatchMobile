@@ -9,6 +9,9 @@ namespace ThreeMatch
     {
         private IAssetService _assetService;
         private readonly List<BundleGroup> _requiredPacks = new();
+
+        public int BundleCount => _requiredPacks.Count;
+        public int LoadedBundleCount { get; private set; } = 0;
         public float progress { get; private set; } = 0f;
         public bool AssetLoadCompleted { get; private set; } = false;
 
@@ -69,9 +72,10 @@ namespace ThreeMatch
 
         #endregion
 
-        private void SetProgress(float value)
+        private void SetProgress(int loadedAssetBundleGroup, float progressPerBundle)
         {
-            progress = Mathf.Clamp01(value);
+            LoadedBundleCount = loadedAssetBundleGroup;
+            progress = Mathf.Clamp01(progressPerBundle);
         }
 
         private void LoadCompleteCallback()

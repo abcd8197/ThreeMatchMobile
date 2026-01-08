@@ -1,13 +1,13 @@
 using System;
 
-
 namespace ThreeMatch
 {
     [Serializable]
-    public class SaveData
+    public class StageSaveData
     {
         public const int CurrentVersion = 1;
         public int Version = CurrentVersion;
-        public StageSaveData StageSaveData;
+
+        public int MaxStage { get; set; }
     }
 }

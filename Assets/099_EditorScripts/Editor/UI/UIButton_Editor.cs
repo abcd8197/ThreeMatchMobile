@@ -20,18 +20,17 @@ namespace ThreeMatch
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            serializedObject.Update();
 
             EditorGUILayout.Space(15);
             EditorGUILayout.LabelField("UIButton Settings", EditorStyles.boldLabel);
-            serializedObject.Update();
+
             EditorGUILayout.PropertyField(_useTweenProp, new GUIContent("Use Tween Animation"));
             EditorGUILayout.Space(10);
 
             EditorGUILayout.LabelField("OnClick Events", EditorStyles.boldLabel);
-            serializedObject.Update();
             EditorGUILayout.PropertyField(_onClickProp);
             serializedObject.ApplyModifiedProperties();
-
         }
     }
 }

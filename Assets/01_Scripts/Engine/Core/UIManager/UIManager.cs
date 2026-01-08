@@ -9,6 +9,7 @@ namespace ThreeMatch
         private const int BaseSortingOrder = 1000;
         private readonly Dictionary<PopupType, PopupBase> _activePopups = new();
         private readonly Dictionary<PopupType, PopupBase> _recyclablePopupCache = new();
+        private readonly Dictionary<PopupType, PopupBase> _popupToRemove = new();
         private readonly AssetManager _assetManager;
         private readonly UIRoot _uiRoot;
 
@@ -16,6 +17,7 @@ namespace ThreeMatch
         {
             _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
             _uiRoot = new GameObject("UIRoot").AddComponent<UIRoot>();
+            GameObject.DontDestroyOnLoad(_uiRoot);
         }
 
         public void ShowPopup(PopupType popupType)
@@ -25,7 +27,7 @@ namespace ThreeMatch
                 return;
             }
 
-            var popupInstance = _assetManager.GetNewInstance<PopupBase>(popupType.GetBundleGroup(), popupType.ToString(), _uiRoot.PopupRoot);
+            var popupInstance = _assetManager.GetInstantiateComponent<PopupBase>(popupType.GetBundleGroup(), popupType.ToString(), _uiRoot.PopupRoot);
             popupInstance.Show(BaseSortingOrder + _activePopups.Count);
             _activePopups.Add(popupType, popupInstance);
         }
@@ -34,20 +36,24 @@ namespace ThreeMatch
         {
             if (_activePopups.TryGetValue(popupType, out var popupInstance))
             {
-                popupInstance.Hide();
-                if (popupInstance.Recycleable)
-                {
-                    popupInstance.gameObject.SetActive(false);
-                    _recyclablePopupCache.Add(popupType, popupInstance);
-                }
-                else
-                {
-                    _assetManager.ReleaseInstance(popupType.GetBundleGroup(), popupType.ToString(), popupInstance.gameObject);
-                    if (popupInstance.gameObject != null)
-                        GameObject.Destroy(popupInstance.gameObject);
-                }
                 _activePopups.Remove(popupType);
+                _popupToRemove.Add(popupType, popupInstance);
+                popupInstance.Hide(HidePopupAfterFadeout);
             }
+        }
+
+        private void HidePopupAfterFadeout(PopupBase popup)
+        {
+            if (popup.Recycleable)
+            {
+                _recyclablePopupCache.Add(popup.PopupType, popup);
+            }
+            else
+            {
+                _assetManager.ReleasePrefab(popup.PopupType.GetBundleGroup(), popup.PopupType.ToString(), popup.gameObject);
+            }
+
+            _popupToRemove.Remove(popup.PopupType);
         }
 
         public T GetActivatePopup<T>(PopupType popupType) where T : PopupBase
@@ -65,7 +71,6 @@ namespace ThreeMatch
         {
             foreach (var popup in _activePopups.Values)
             {
-                popup.Hide();
                 GameObject.Destroy(popup.gameObject);
             }
 

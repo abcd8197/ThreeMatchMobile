@@ -23,7 +23,7 @@ namespace ThreeMatch
         }
 
         #region ## Load Methods ##
-        public async Task LoadAssetPackAsync(IEnumerable<BundleGroup> bundleList, Action<float> progressAction = null, Action completeAction = null, CancellationToken ct = default)
+        public async Task LoadAssetPackAsync(IEnumerable<BundleGroup> bundleList, Action<int, float> progressAction = null, Action completeAction = null, CancellationToken ct = default)
         {
             Dictionary<BundleGroup, AsyncOperationHandle<IList<IResourceLocation>>> locationHandles = new();
             bool success = false;
@@ -76,17 +76,27 @@ namespace ThreeMatch
                 // Step 3-1 : 로드할 에셋이 없는 경우 처리
                 if (totalAssetCount == 0)
                 {
-                    progressAction?.Invoke(1f);
+                    progressAction?.Invoke(locationHandles.Count, 1f);
                     completeAction?.Invoke();
                     return;
                 }
 
                 // Step 4 : 로드 할 에셋 Queue에 삽입
+                int loadedAssetBundleGroup = 0;
                 int loadedAssetCount = 0;
                 var queue = new Queue<(BundleGroup, IResourceLocation)>(totalAssetCount);
+                var dickLock = new object();
+                var dictAssetNumber = new Dictionary<BundleGroup, int>();
+
                 foreach (var kv in locationHandles)
+                {
+                    dictAssetNumber.Add(kv.Key, 0);
                     foreach (var location in kv.Value.Result)
+                    {
                         queue.Enqueue((kv.Key, location));
+                        dictAssetNumber[kv.Key]++;
+                    }
+                }
 
                 // Step 5 : 병렬 로드 시작
                 var qLock = new object();
@@ -119,8 +129,15 @@ namespace ThreeMatch
 
                         await LoadAssetAsync(item.Item1, item.Item2, ct);
 
+                        lock (dickLock)
+                        {
+                            dictAssetNumber[item.Item1]--;
+                            if (dictAssetNumber[item.Item1] <= 0)
+                                loadedAssetBundleGroup++;
+                        }
+
                         int done = Interlocked.Increment(ref loadedAssetCount);
-                        progressAction?.Invoke((float)done / totalAssetCount);
+                        progressAction?.Invoke(loadedAssetBundleGroup, (float)done / totalAssetCount);
                     }
                 }
             }
@@ -134,7 +151,7 @@ namespace ThreeMatch
 
                 if (success)
                 {
-                    progressAction?.Invoke(1f);
+                    progressAction?.Invoke(locationHandles.Count, 1f);
                     completeAction?.Invoke();
                 }
             }

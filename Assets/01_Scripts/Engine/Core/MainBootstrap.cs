@@ -16,6 +16,8 @@ namespace ThreeMatch
 
             CreateAssetManager(main);
             main.RegisterManager(new UIManager(main.GetManager<AssetManager>()));
+            main.RegisterManager(new StageManager());
+            main.RegisterManager(new AuthManager());
         }
 
         private void CreateSaveManager(Main main)

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: defaultasset
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: defaultasset
+  m_GUID: 5ffbfc1ec0b102b43a112289295078d8
+  m_SerializeEntries:
+  - m_GUID: 2574cc3d7228c8949b36a823ac889feb
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/img_ui_home.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 306210b7f30337b45b74632a7edb1a9b
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/Popup/SceneChangePopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fe2c7ee806b7cf428dd22f29b66e1b7
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/img_ui_setting.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a1cb46f0b57f2c048aeaf32252ca4f50, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b5d1cedb2bbc5874bbc4dead7212ce70, type: 2}
+    - {fileID: 11400000, guid: 9447322a5177a4e44ae3fce34a565175, type: 2}

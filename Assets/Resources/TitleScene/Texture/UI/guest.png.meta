@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 2574cc3d7228c8949b36a823ac889feb
+guid: cde462c4f1a80034fa306988e9e46ca9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7579732621468621710
-    second: homeBtn_0
+      213: 5873876311067946795
+    second: guest_0
   - first:
-      213: 2950944127648824367
-    second: homeBtn_1
+      213: -8715739618876848386
+    second: guest_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: homeBtn_0
+      name: guest_0
       rect:
         serializedVersion: 2
-        x: 8
-        y: 133
-        width: 240
-        height: 123
+        x: 32
+        y: 114
+        width: 448
+        height: 367
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,20 +144,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e8bd31bf8ae903960800000000000000
-      internalID: 7579732621468621710
+      spriteID: b2f69cf3263348150800000000000000
+      internalID: 5873876311067946795
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: homeBtn_1
+      name: guest_1
       rect:
         serializedVersion: 2
-        x: 19
-        y: 0
-        width: 218
-        height: 213
+        x: 108
+        y: 31
+        width: 298
+        height: 149
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,8 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f2c7880ac0cd3f820800000000000000
-      internalID: 2950944127648824367
+      spriteID: ef60c0e9ef87b0780800000000000000
+      internalID: -8715739618876848386
       vertices: []
       indices: 
       edges: []
@@ -186,8 +186,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      homeBtn_0: 7579732621468621710
-      homeBtn_1: 2950944127648824367
+      guest_0: 5873876311067946795
+      guest_1: -8715739618876848386
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
