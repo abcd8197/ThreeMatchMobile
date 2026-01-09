@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc9824cc4d88c6d4597e13d5f0c851f6
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/Object/StageNode.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a1cb46f0b57f2c048aeaf32252ca4f50, type: 2}
   m_SchemaSet:

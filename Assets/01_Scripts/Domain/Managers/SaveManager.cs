@@ -10,12 +10,15 @@ namespace ThreeMatch
         private readonly Dictionary<Type, ISaveModule> _registeredModules = new();
         private readonly ISaveService _saveService;
 
+        public Type ModuleType => typeof(ISaveModule);
+
         public SaveManager(SaveData saveData, ISaveService saveService)
         {
             _saveData = saveData ?? new SaveData();
             _saveService = saveService;
         }
 
+        public void Register(IModule module) => RegisterModule((ISaveModule)module);
         public void RegisterModule(ISaveModule module)
         {
             var type = module.GetType();
@@ -25,16 +28,6 @@ namespace ThreeMatch
                 return;
             }
             _registeredModules[type] = module;
-        }
-
-        public void Dispose()
-        {
-            foreach (var module in _registeredModules.Values)
-            {
-                module?.Dispose();
-            }
-
-            _registeredModules?.Clear();
         }
 
         public void InitializeSaveData()
@@ -53,6 +46,16 @@ namespace ThreeMatch
             }
 
             _saveService?.SaveData(_saveData);
+        }
+
+        public void Dispose()
+        {
+            foreach (var module in _registeredModules.Values)
+            {
+                module?.Dispose();
+            }
+
+            _registeredModules?.Clear();
         }
     }
 }

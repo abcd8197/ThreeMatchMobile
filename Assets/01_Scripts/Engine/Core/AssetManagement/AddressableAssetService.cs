@@ -174,7 +174,10 @@ namespace ThreeMatch
                     dict = new Dictionary<string, AssetData>();
                     _loadedAssetDatas[pack] = dict;
                 }
-                dict[location.PrimaryKey] = new AssetData(h);
+
+                string[] seperated = location.PrimaryKey.Split('.')[0].Split('/');
+                string fileName = seperated[seperated.Length - 1];
+                dict[fileName] = new AssetData(h);
             }
 
         }

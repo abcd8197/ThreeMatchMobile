@@ -7,11 +7,23 @@ namespace ThreeMatch
     {
         private static readonly Lazy<Main> _lazy = new(() => new Main());
         public static Main Instance = _lazy.Value;
+
         private readonly Dictionary<Type, IManager> _globalManagers = new();
 
         public void Initialize()
         {
 
+        }
+
+        public void Build()
+        {
+            foreach (var manager in _globalManagers)
+            {
+                if (manager.Value is IModule module)
+                    RegisterModule(module);
+            }
+
+            (_globalManagers[typeof(SaveManager)] as SaveManager).InitializeSaveData();
         }
 
         public void RegisterManager<T>(T manager) where T : IManager
@@ -23,22 +35,15 @@ namespace ThreeMatch
             }
 
             _globalManagers[type] = manager;
-
-            if (manager is IModule module)
-                RegisterModule(module);
         }
 
-        private void RegisterModule<TModule>(TModule module) where TModule : IModule
+        private void RegisterModule(IModule module)
         {
-            foreach (var manager in _globalManagers.Values)
+            foreach (var manager in _globalManagers)
             {
-                var registrarType = typeof(IModuleRegistrar<TModule>);
-                if (registrarType.IsAssignableFrom(manager.GetType()))
-                {
-                    var registrar = manager as IModuleRegistrar<TModule>;
-                    registrar.RegisterModule(module);
-                    break;
-                }
+                if (manager.Value is not IModuleRegistrar r) continue;
+                if (!r.ModuleType.Equals(module.ModuleType)) continue;
+                r.Register(module);
             }
         }
 

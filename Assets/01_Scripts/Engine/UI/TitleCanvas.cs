@@ -60,19 +60,26 @@ namespace ThreeMatch
         private void ClickLoginButton(AuthType authType)
         {
             Main.Instance.GetManager<AuthManager>().Login(authType);
+            LoadingEnabled(true);
             _loginCoroutine = StartCoroutine(WaitForAuth());
         }
 
         private IEnumerator WaitForAuth()
         {
+            LoginPanel.SetActive(false);
+
             var authManager = Main.Instance.GetManager<AuthManager>();
             while (!authManager.Authenticated)
             {
                 yield return null;
             }
 
-            if (authManager.CurrentType != AuthType.None)
-                LoginPanel.SetActive(false);
+            if (authManager.CurrentType == AuthType.None)
+                LoginPanel.SetActive(true);
+
+            yield return new WaitForSeconds(1f);
+            LoadingEnabled(false);
+            Main.Instance.GetManager<SceneManager>().LoadScene(SceneType.Main);
 
             _loginCoroutine = null;
         }

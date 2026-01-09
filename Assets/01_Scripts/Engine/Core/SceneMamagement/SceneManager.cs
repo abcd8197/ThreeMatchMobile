@@ -1,14 +1,17 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace ThreeMatch
 {
-    public class SceneManager : IManager
+    public class SceneManager : IModuleRegistrar<ISceneChangeNotifyModule>
     {
         private Coroutine _sceneLoadCoroutine;
+        private Dictionary<Type, ISceneChangeNotifyModule> _modules = new();
+        public SceneType CurrentSceneType { get; private set; } = SceneType.Title;
 
-        public SceneType CurrentSceneType { get; private set; } = SceneType.Empty;
+        public Type ModuleType => typeof(ISceneChangeNotifyModule);
 
         public SceneManager()
         {
@@ -21,6 +24,14 @@ namespace ThreeMatch
                 CoroutineHandler.Instance.StopCoroutine(_sceneLoadCoroutine);
         }
 
+        public void Register(IModule module) => RegisterModule((ISceneChangeNotifyModule)module);
+        public void RegisterModule(ISceneChangeNotifyModule module)
+        {
+            var type = module.GetType();
+            if (!_modules.ContainsKey(type))
+                _modules[type] = module;
+        }
+
         public void LoadScene(SceneType sceneType)
         {
             if (_sceneLoadCoroutine == null)
@@ -29,6 +40,8 @@ namespace ThreeMatch
 
         private IEnumerator LoadSceneCoroutine(SceneType sceneType)
         {
+            OnNitifyStartSceneChange(CurrentSceneType, sceneType);
+
             AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync((int)SceneType.Empty);
             asyncOperation.allowSceneActivation = true;
 
@@ -42,6 +55,7 @@ namespace ThreeMatch
                 yield return null;
             }
 
+            OnNotifySceneChanged(SceneType.Empty);
             yield return new WaitForSeconds(1f);
 
             asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync((int)sceneType);
@@ -59,6 +73,19 @@ namespace ThreeMatch
             }
 
             CurrentSceneType = sceneType;
+            OnNotifySceneChanged(CurrentSceneType);
+        }
+
+        private void OnNitifyStartSceneChange(SceneType fromScene, SceneType toScene)
+        {
+            foreach (var module in _modules.Values)
+                module?.OnStartSceneChange(fromScene, toScene);
+        }
+
+        private void OnNotifySceneChanged(SceneType sceneType)
+        {
+            foreach (var module in _modules.Values)
+                module?.OnSceneChanged(sceneType);
         }
     }
 }

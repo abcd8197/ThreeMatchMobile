@@ -4,30 +4,23 @@ namespace ThreeMatch
 {
     public class UIRoot : MonoBehaviour
     {
+        private TitleCanvas _titleCanvas;
         public Transform PopupRoot { get; private set; }
+
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
 
         private void Start()
         {
-            CreatePopupRoot();
-            CreateTitleCanvas();
+            PopupRoot = Instantiate(Resources.Load<GameObject>("TitleScene/Prefab/UI/Popup/PopupRoot"), transform, false).transform;
+            _titleCanvas = Instantiate(Resources.Load<GameObject>("TitleScene/Prefab/UI/Popup/TitleCanvas"), transform).GetComponent<TitleCanvas>();
+        }
 
-            void CreatePopupRoot()
-            {
-                PopupRoot = new GameObject("PopupRoot").AddComponent<RectTransform>();
-                PopupRoot.SetParent(this.transform, false);
-
-                var rectTransform = PopupRoot.GetComponent<RectTransform>();
-                rectTransform.anchorMin = Vector2.zero;
-                rectTransform.anchorMax = Vector2.one;
-                rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                rectTransform.offsetMin = Vector2.zero;
-                rectTransform.offsetMax = Vector2.zero;
-            }
-
-            void CreateTitleCanvas()
-            {
-                Instantiate(Resources.Load<GameObject>("TitleScene/Prefab/UI/Popup/TitleCanvas"), transform).GetComponent<TitleCanvas>();
-            }
+        public void DestroyTitleCanvas()
+        {
+            Destroy(_titleCanvas.gameObject);
         }
     }
 }

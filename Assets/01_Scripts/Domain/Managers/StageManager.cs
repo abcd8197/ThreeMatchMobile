@@ -1,3 +1,5 @@
+using System;
+
 namespace ThreeMatch
 {
     public class StageManager : IManager, ISaveModule
@@ -5,6 +7,8 @@ namespace ThreeMatch
         private StageSaveData _saveData;
 
         public int MaxStage => _saveData == null ? 0 : _saveData.MaxStage;
+
+        public Type ModuleType => typeof(ISaveModule);
 
         public void Dispose()
         {

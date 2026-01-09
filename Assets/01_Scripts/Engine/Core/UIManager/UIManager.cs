@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ThreeMatch
 {
-    public class UIManager : IManager
+    public class UIManager : IManager, ISceneChangeNotifyModule
     {
         private const int BaseSortingOrder = 1000;
         private readonly Dictionary<PopupType, PopupBase> _activePopups = new();
@@ -13,11 +13,12 @@ namespace ThreeMatch
         private readonly AssetManager _assetManager;
         private readonly UIRoot _uiRoot;
 
+        public Type ModuleType => typeof(ISceneChangeNotifyModule);
+
         public UIManager(AssetManager assetManager)
         {
             _assetManager = assetManager ?? throw new ArgumentNullException(nameof(assetManager));
             _uiRoot = new GameObject("UIRoot").AddComponent<UIRoot>();
-            GameObject.DontDestroyOnLoad(_uiRoot);
         }
 
         public void ShowPopup(PopupType popupType)
@@ -27,7 +28,7 @@ namespace ThreeMatch
                 return;
             }
 
-            var popupInstance = _assetManager.GetInstantiateComponent<PopupBase>(popupType.GetBundleGroup(), popupType.ToString(), _uiRoot.PopupRoot);
+            var popupInstance = _assetManager.GetInstantiateComponent<PopupBase>(popupType.GetBundleGroup(), popupType.ToString(), parent: _uiRoot.PopupRoot);
             popupInstance.Show(BaseSortingOrder + _activePopups.Count);
             _activePopups.Add(popupType, popupInstance);
         }
@@ -76,6 +77,24 @@ namespace ThreeMatch
 
             _activePopups.Clear();
             GameObject.Destroy(_uiRoot.gameObject);
+        }
+
+        public void OnStartSceneChange(SceneType fromScene, SceneType toScene)
+        {
+            switch (fromScene, toScene)
+            {
+                case (SceneType.Title, _):
+                    _uiRoot.DestroyTitleCanvas();
+                    break;
+            }
+
+            ShowPopup(PopupType.SceneChangePopup);
+        }
+
+        public void OnSceneChanged(SceneType sceneType)
+        {
+            if (sceneType != SceneType.Empty)
+                HidePopup(PopupType.SceneChangePopup);
         }
     }
 }

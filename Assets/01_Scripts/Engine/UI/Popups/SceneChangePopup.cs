@@ -11,6 +11,13 @@ namespace ThreeMatch
             "img_ui_home", "img_ui_setting"
         };
 
+        public override PopupType PopupType => PopupType.SceneChangePopup;
+
+        private void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
+
         public override void Show(int sortingOrder)
         {
             base.Show(sortingOrder);

@@ -11,7 +11,7 @@ namespace ThreeMatch
 
         private Coroutine _fadeCoroutine;
         public bool Recycleable { get; protected set; } = false;
-        public PopupType PopupType { get; protected set; } = PopupType.None;
+        public abstract PopupType PopupType { get; }
 
         private void Awake()
         {

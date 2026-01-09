@@ -11,13 +11,13 @@ namespace ThreeMatch
             main.Initialize();
 
             CreateSaveManager(main);
-
-            main.GetManager<SaveManager>().InitializeSaveData();
-
             CreateAssetManager(main);
+            main.RegisterManager(new SceneManager());
             main.RegisterManager(new UIManager(main.GetManager<AssetManager>()));
             main.RegisterManager(new StageManager());
             main.RegisterManager(new AuthManager());
+            main.RegisterManager(new GameManager());
+            main.Build();
         }
 
         private void CreateSaveManager(Main main)
