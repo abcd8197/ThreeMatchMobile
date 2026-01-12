@@ -12,11 +12,18 @@ namespace ThreeMatch
             new Vector2(0.1f, 5.7f), new Vector2(1.104f, 6.303f), new Vector2(0.26f, 7.25f), new Vector2(-0.7f, 7.75f), new Vector2(0.94f, 8.82f)
         };
 
-        [SerializeField] private float ScrollSpeed = 7.0f;
+        private float ScrollSpeed = 7.0f;
         private SpriteRendererButton[] backgrounds;
         private List<StageNode> stageNodes = new();
         private AssetManager _assetManager;
-        private float basicPosY;
+
+        private float _basicPosY;
+        private float _backgroundHeight;
+        private float _maxY;
+        private float _minY;
+
+        private int _loopCount;
+        private int _prevLoopCount;
 
         private void Awake()
         {
@@ -38,20 +45,22 @@ namespace ThreeMatch
 
         private void CalculateWorldPosition()
         {
-            basicPosY = transform.position.y;
+            _basicPosY = transform.position.y;
+            _backgroundHeight = Camera.main.orthographicSize * 2;
+            _maxY = (_backgroundHeight * (backgrounds.Length - 1)) + _basicPosY;
+            _minY = -_backgroundHeight + _basicPosY;
         }
 
         private void CreateNodes()
         {
-            for (int i = 0; i < _nodeLocalPositions.Count * 2; i++)
+            int maxStage = Main.Instance.GetManager<StageManager>().MaxStage;
+            for (int i = 0; i < _nodeLocalPositions.Count * backgrounds.Length; i++)
             {
                 StageNode node;
-                if (i < _nodeLocalPositions.Count)
-                    node = _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageNode", false, backgrounds[0].transform).GetComponent<StageNode>();
-                else
-                    node = _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageNode", false, backgrounds[1].transform).GetComponent<StageNode>();
-
+                int backgroundIndex = Mathf.FloorToInt(i / _nodeLocalPositions.Count);
+                node = _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageNode", false, backgrounds[backgroundIndex].transform).GetComponent<StageNode>();
                 node.transform.localPosition = _nodeLocalPositions[i % _nodeLocalPositions.Count];
+                node.SetData(i, maxStage);
                 stageNodes.Add(node.GetComponent<StageNode>());
             }
         }
@@ -63,13 +72,41 @@ namespace ThreeMatch
             d.z = 0;
             transform.position += d * Time.unscaledDeltaTime * ScrollSpeed;
 
-            if (transform.position.y > basicPosY)
-                transform.position = Vector3.up * basicPosY;
+            if (transform.position.y > _basicPosY)
+                transform.position = Vector3.up * _basicPosY;
+
+            foreach (var background in backgrounds)
+            {
+                if (background.transform.position.y < _minY)
+                {
+                    background.transform.position += Vector3.up * backgrounds.Length * _backgroundHeight;
+                    _loopCount++;
+                }
+                else if (background.transform.position.y > _maxY)
+                {
+                    background.transform.position -= Vector3.up * backgrounds.Length * _backgroundHeight;
+                    _loopCount--;
+                }
+            }
+
+            UpdateNodeData();
         }
 
         private void UpdateNodeData()
         {
+            if (_prevLoopCount == _loopCount)
+                return;
 
+            int stage = 0;
+            int maxStage = Main.Instance.GetManager<StageManager>().MaxStage;
+
+            for (int i = 0; i < stageNodes.Count; i++)
+            {
+                stage = i + 1;
+                stageNodes[i].SetData(i + (((_loopCount + 1) / 3) * _nodeLocalPositions.Count * backgrounds.Length), maxStage);
+            }
+
+            _prevLoopCount = _loopCount;
         }
     }
 }

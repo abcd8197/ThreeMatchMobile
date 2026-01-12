@@ -4,5 +4,6 @@ namespace ThreeMatch
     {
         None,
         SceneChangePopup,
+        StageEnterPopup,
     }
 }

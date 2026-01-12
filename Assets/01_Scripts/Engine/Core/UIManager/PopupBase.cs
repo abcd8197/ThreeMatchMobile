@@ -7,7 +7,7 @@ namespace ThreeMatch
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class PopupBase : MonoBehaviour
     {
-        [SerializeField] protected CanvasGroup _canvasGroup;
+        protected CanvasGroup _canvasGroup;
 
         private Coroutine _fadeCoroutine;
         public bool Recycleable { get; protected set; } = false;

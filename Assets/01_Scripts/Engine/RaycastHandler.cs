@@ -21,7 +21,7 @@ namespace ThreeMatch
         private Vector2 _prevScreenPos;
         private Vector2 _currScreenPos;
        
-        public Vector2 DragDelta { get; private set; }   // 이전 프레임 대비
+        public Vector2 DragDelta { get; private set; }
         private void Awake()
         {
             _rayLayerMask = 1 << LayerMask.NameToLayer("Raycastable");
@@ -38,21 +38,17 @@ namespace ThreeMatch
 
             if (_clickAction.WasPressedThisFrame())
             {
-                Debug.Log("Begin!");
                 HandlePointerDown(screenPos);
             }
             else if(_clickAction.IsPressed())
             {
-                Debug.Log("Drag!");
                 HandlePointerDrag(screenPos);
             }
             else if(_clickAction.WasReleasedThisFrame())
             {
-                Debug.Log("End!");
                 HandlePointerUp(screenPos);
             }
         }
-
 
         private void HandlePointerDown(Vector2 screenPos)
         {
@@ -74,7 +70,7 @@ namespace ThreeMatch
             if (_current == null) return;
 
             _currScreenPos = screenPos;
-            DragDelta = _currScreenPos - _prevScreenPos;   // 프레임 델타
+            DragDelta = _currScreenPos - _prevScreenPos;
 
             if (!_isDragging)
             {
@@ -84,7 +80,7 @@ namespace ThreeMatch
 
             _current.OnDrag(DragDelta);
 
-            _prevScreenPos = _currScreenPos; // 마지막에 갱신
+            _prevScreenPos = _currScreenPos;
         }
 
         private void HandlePointerUp(Vector2 screenPos)

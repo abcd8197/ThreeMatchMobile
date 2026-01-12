@@ -8,9 +8,9 @@ namespace ThreeMatch
         [SerializeField] private TextMeshPro txt_Stage;
         [SerializeField] private SpriteRenderer sp_Lock;
 
-        public void SetData(int stage, bool clearState)
+        public void SetData(int stage, int maxStage)
         {
-            sp_Lock.enabled = !clearState;
+            sp_Lock.enabled = stage < maxStage;
             txt_Stage.text = stage.ToString();
         }
 
