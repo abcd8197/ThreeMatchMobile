@@ -6,11 +6,13 @@ namespace ThreeMatch
     public class StageNode : MonoBehaviour, IRaycastable
     {
         [SerializeField] private TextMeshPro txt_Stage;
-        [SerializeField] private SpriteRenderer sp_Lock;
-
+        [SerializeField] private SpriteRenderer sp_Back;
+        public int RaycastOrder => 1;
+        private int _stage;
         public void SetData(int stage, int maxStage)
         {
-            sp_Lock.enabled = stage < maxStage;
+            _stage = stage;
+            sp_Back.color = stage < maxStage ? Color.white : Color.gray;
             txt_Stage.text = stage.ToString();
         }
 
@@ -29,6 +31,17 @@ namespace ThreeMatch
         public void OnPointerUp()
         {
 
+        }
+
+        public void OnPointerClick()
+        {
+            var uiManager = Main.Instance.GetManager<UIManager>();
+
+            if (!uiManager.IsPopupActivated(PopupType.StageEnterPopup))
+            {
+                Main.Instance.GetManager<StageManager>().SetStageData(_stage);
+                uiManager.ShowPopup(PopupType.StageEnterPopup);
+            }
         }
         #endregion
     }

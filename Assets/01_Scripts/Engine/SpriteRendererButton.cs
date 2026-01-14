@@ -11,6 +11,7 @@ namespace ThreeMatch
         private const float FromScaleX = 1.2f;
         private const float FromScaleY = 1.2f;
         private const float TweenDuration = 1f;
+        public int RaycastOrder => 0;
 
         private Sequence _seq;
         private bool _isAnimated = false;
@@ -76,7 +77,7 @@ namespace ThreeMatch
                 onClick?.Invoke();
         }
 
-        private void OnPointerClick()
+        public void OnPointerClick()
         {
             if (!UseTween)
                 onClick?.Invoke();

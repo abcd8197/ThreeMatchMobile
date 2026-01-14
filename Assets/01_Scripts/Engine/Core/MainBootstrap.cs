@@ -17,6 +17,7 @@ namespace ThreeMatch
             main.RegisterManager(new StageManager());
             main.RegisterManager(new AuthManager());
             main.RegisterManager(new GameManager());
+            main.RegisterManager(new ItemManager());
             main.Build();
         }
 

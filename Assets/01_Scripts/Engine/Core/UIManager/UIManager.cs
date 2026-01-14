@@ -66,6 +66,7 @@ namespace ThreeMatch
             return null;
         }
 
+        public bool IsPopupActivated(PopupType popupType) => _activePopups.ContainsKey(popupType);
         public bool IsAnyPopupActive() => _activePopups.Count > 0;
 
         public void Dispose()
@@ -81,13 +82,6 @@ namespace ThreeMatch
 
         public void OnStartSceneChange(SceneType fromScene, SceneType toScene)
         {
-            switch (fromScene, toScene)
-            {
-                case (SceneType.Title, _):
-                    _uiRoot.DestroyTitleCanvas();
-                    break;
-            }
-
             ShowPopup(PopupType.SceneChangePopup);
         }
 
@@ -95,6 +89,7 @@ namespace ThreeMatch
         {
             if (sceneType != SceneType.Empty)
                 HidePopup(PopupType.SceneChangePopup);
+            _uiRoot.OnChangedScene(sceneType);
         }
     }
 }

@@ -9,5 +9,6 @@ namespace ThreeMatch
         public const int CurrentVersion = 1;
         public int Version = CurrentVersion;
         public StageSaveData StageSaveData;
+        public ItemSaveData ItemSaveData;
     }
 }

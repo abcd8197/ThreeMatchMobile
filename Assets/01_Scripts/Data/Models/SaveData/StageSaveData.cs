@@ -9,5 +9,6 @@ namespace ThreeMatch
         public int Version = CurrentVersion;
 
         public int MaxStage { get; set; }
+        public int CurrentStage { get; set; }
     }
 }

@@ -6,7 +6,6 @@ namespace ThreeMatch
     public class GameManager : IManager, ISceneChangeNotifyModule
     {
         private RaycastHandler _raycastHandler;
-
         public Type ModuleType => typeof(ISceneChangeNotifyModule);
 
         public GameManager()
@@ -20,6 +19,12 @@ namespace ThreeMatch
             UnityEngine.Object.DontDestroyOnLoad(_raycastHandler);
             _raycastHandler.RaycastEnabled(false);
         }
+
+        public void StartGame()
+        {
+
+        }
+
 
         public void Dispose()
         {

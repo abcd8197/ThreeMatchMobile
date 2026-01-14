@@ -13,18 +13,30 @@ namespace ThreeMatch
         public bool Recycleable { get; protected set; } = false;
         public abstract PopupType PopupType { get; }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
 
+        protected virtual void OnDestroy()
+        {
+            if (_fadeCoroutine != null)
+                StopCoroutine(_fadeCoroutine);
+        }
+
         public virtual void Show(int sortingOrder)
         {
+            _canvasGroup ??= GetComponent<CanvasGroup>();
+
             var canvas = GetComponent<Canvas>();
             if (canvas != null)
             {
                 canvas.sortingOrder = sortingOrder;
             }
+
+            if (_fadeCoroutine != null)
+                StopCoroutine(_fadeCoroutine);
+            _fadeCoroutine = StartCoroutine(FadeCoroutine(true));
         }
 
         public virtual void Hide(Action<PopupBase> hideCompleteAction)
@@ -36,6 +48,8 @@ namespace ThreeMatch
 
         public virtual void Fade(bool enabled)
         {
+            _canvasGroup ??= GetComponent<CanvasGroup>();
+
             if (_fadeCoroutine != null)
                 StopCoroutine(_fadeCoroutine);
             _fadeCoroutine = StartCoroutine(FadeCoroutine(true));
@@ -43,8 +57,9 @@ namespace ThreeMatch
 
         protected virtual IEnumerator FadeCoroutine(bool fadeIn, Action<PopupBase> hideCompleteAction = null)
         {
-            const float FadeDuration = 0.75f;
+            const float FadeDuration = 0.35f;
             float cnt = 0f;
+            _canvasGroup.alpha = fadeIn ? 0 : 1;
             while (cnt < FadeDuration)
             {
                 cnt += Time.deltaTime;

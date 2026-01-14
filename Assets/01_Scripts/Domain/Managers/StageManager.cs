@@ -12,7 +12,7 @@ namespace ThreeMatch
 
         public void Dispose()
         {
-            
+
         }
 
         public void InitializeSaveData(SaveData saveData)
@@ -23,12 +23,19 @@ namespace ThreeMatch
 
         public void SaveData()
         {
-            
+
         }
 
         public void SetMaxStage(int maxStage)
         {
             _saveData.MaxStage = maxStage;
         }
+
+        public void SetStageData(int stage)
+        {
+            _saveData.CurrentStage = stage;
+        }
+
+        public int GetCurrentStage() => _saveData.CurrentStage;
     }
 }

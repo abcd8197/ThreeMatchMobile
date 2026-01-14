@@ -13,8 +13,9 @@ namespace ThreeMatch
 
         public override PopupType PopupType => PopupType.SceneChangePopup;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             DontDestroyOnLoad(this.gameObject);
         }
 

@@ -14,13 +14,13 @@ namespace ThreeMatch
         private bool _raycastEnabled = false;
         private bool _isDragging = false;
         private IRaycastable _current = null;
-        
+
         private InputAction _pointAction;
         private InputAction _clickAction;
 
         private Vector2 _prevScreenPos;
         private Vector2 _currScreenPos;
-       
+
         public Vector2 DragDelta { get; private set; }
         private void Awake()
         {
@@ -40,11 +40,11 @@ namespace ThreeMatch
             {
                 HandlePointerDown(screenPos);
             }
-            else if(_clickAction.IsPressed())
+            else if (_clickAction.IsPressed())
             {
                 HandlePointerDrag(screenPos);
             }
-            else if(_clickAction.WasReleasedThisFrame())
+            else if (_clickAction.WasReleasedThisFrame())
             {
                 HandlePointerUp(screenPos);
             }
@@ -94,6 +94,12 @@ namespace ThreeMatch
                 _current.OnEndDrag();
 
             _current.OnPointerUp();
+            
+            var topRaycastable = RaycastTopRaycastable(screenPos);
+            
+            if (_current == topRaycastable)
+                _current.OnPointerClick();
+
             _current = null;
             _isDragging = false;
 
@@ -108,15 +114,18 @@ namespace ThreeMatch
             if (hits == null || hits.Length == 0) return null;
 
             Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-
+            IRaycastable raycast = null;
             foreach (var hit in hits)
             {
                 var raycastable = FindRaycastable(hit.collider);
                 if (raycastable != null)
-                    return raycastable;
+                {
+                    if (raycast == null || raycastable.RaycastOrder > raycast.RaycastOrder)
+                        raycast = raycastable;
+                }
             }
 
-            return null;
+            return raycast;
         }
 
         private static IRaycastable FindRaycastable(Collider2D col)

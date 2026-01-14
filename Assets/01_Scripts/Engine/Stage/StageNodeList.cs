@@ -60,7 +60,7 @@ namespace ThreeMatch
                 int backgroundIndex = Mathf.FloorToInt(i / _nodeLocalPositions.Count);
                 node = _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageNode", false, backgrounds[backgroundIndex].transform).GetComponent<StageNode>();
                 node.transform.localPosition = _nodeLocalPositions[i % _nodeLocalPositions.Count];
-                node.SetData(i, maxStage);
+                node.SetData(i + 1, maxStage);
                 stageNodes.Add(node.GetComponent<StageNode>());
             }
         }
@@ -99,11 +99,14 @@ namespace ThreeMatch
 
             int stage = 0;
             int maxStage = Main.Instance.GetManager<StageManager>().MaxStage;
+            int nodePerBackground = _nodeLocalPositions.Count;
+            int backgroundCount = backgrounds.Length;
 
             for (int i = 0; i < stageNodes.Count; i++)
             {
-                stage = i + 1;
-                stageNodes[i].SetData(i + (((_loopCount + 1) / 3) * _nodeLocalPositions.Count * backgrounds.Length), maxStage);
+                stage = i + ((_loopCount + 1) / 3) * nodePerBackground * backgroundCount;
+                stage += 1;
+                stageNodes[i].SetData(stage, maxStage);
             }
 
             _prevLoopCount = _loopCount;

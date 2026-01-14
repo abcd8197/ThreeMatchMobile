@@ -2,7 +2,8 @@
     "name": "Domain",
     "rootNamespace": "ThreeMatch",
     "references": [
-        "GUID:86fc7ec12e22f8344b3b275fa35a73ff"
+        "GUID:86fc7ec12e22f8344b3b275fa35a73ff",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Engine::ThreeMatch.StageNode
   txt_Stage: {fileID: 512469232049683115}
-  sp_Lock: {fileID: 6650436021821656893}
+  sp_Back: {fileID: 8171191052064337843}
 --- !u!212 &8171191052064337843
 SpriteRenderer:
   serializedVersion: 2
@@ -170,6 +170,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Engine::ThreeMatch.SpriteRendererButton
   UseTween: 1
   onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onEndDrag:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &5562527365974845320
