@@ -1,14 +1,24 @@
 using System;
+using System.Collections.Generic;
 
 namespace ThreeMatch
 {
     public class StageManager : IManager, ISaveModule
     {
+        public readonly int CellSizeX = 9;
+        public readonly int CellSizeY = 9;
+
         private StageSaveData _saveData;
+        private readonly List<StageData> _stageData;
 
         public int MaxStage => _saveData == null ? 0 : _saveData.MaxStage;
 
         public Type ModuleType => typeof(ISaveModule);
+
+        public StageManager()
+        { 
+
+        }
 
         public void Dispose()
         {
