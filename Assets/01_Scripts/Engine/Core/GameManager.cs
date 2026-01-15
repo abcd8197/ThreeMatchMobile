@@ -28,7 +28,8 @@ namespace ThreeMatch
 
         public void Dispose()
         {
-            
+            if (_raycastHandler != null)
+                UnityEngine.Object.DestroyImmediate(_raycastHandler);
         }
 
         public void OnStartSceneChange(SceneType fromScene, SceneType toScene)

@@ -31,6 +31,13 @@ namespace ThreeMatch
             _clickAction = InputSystem.actions.FindAction("Click");
         }
 
+        private void OnDestroy()
+        {
+            _pointAction?.Dispose();
+            _clickAction?.Dispose();
+            _current = null;
+        }
+
         private void Update()
         {
             if (!_raycastEnabled) return;
