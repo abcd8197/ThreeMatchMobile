@@ -14,7 +14,7 @@ namespace ThreeMatch
             CreateAssetManager(main);
             main.RegisterManager(new SceneManager());
             main.RegisterManager(new UIManager(main.GetManager<AssetManager>()));
-            main.RegisterManager(new StageManager());
+            main.RegisterManager(new StageManager(ResourcesDataLoader.LoadData<StageData>("Datas/StageData")));
             main.RegisterManager(new AuthManager());
             main.RegisterManager(new GameManager());
             main.RegisterManager(new ItemManager());

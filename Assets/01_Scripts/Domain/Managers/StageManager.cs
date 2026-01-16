@@ -5,18 +5,20 @@ namespace ThreeMatch
 {
     public class StageManager : IManager, ISaveModule
     {
-        public readonly int CellSizeX = 9;
-        public readonly int CellSizeY = 9;
-
         private StageSaveData _saveData;
-        private readonly List<StageData> _stageData;
+        private readonly List<StageData> _stageData = new();
 
-        public int MaxStage => _saveData == null ? 0 : _saveData.MaxStage;
 
         public Type ModuleType => typeof(ISaveModule);
 
-        public StageManager()
-        { 
+        public StageManager(List<StageData> datas)
+        {
+            _stageData.AddRange(datas);
+        }
+
+        private void LoadStageData(string json)
+        {
+            // StageData에 필요한 데이터들 Load
 
         }
 
@@ -25,6 +27,7 @@ namespace ThreeMatch
 
         }
 
+        #region ## ISaveModule ##
         public void InitializeSaveData(SaveData saveData)
         {
             saveData.StageSaveData ??= new();
@@ -35,17 +38,18 @@ namespace ThreeMatch
         {
 
         }
+        #endregion
 
-        public void SetMaxStage(int maxStage)
+        #region ## API ##
+        public void CurrentStageCleared()
         {
-            _saveData.MaxStage = maxStage;
+            if (_saveData.CurrentStage > _saveData.MaxStage)
+                _saveData.MaxStage = _saveData.CurrentStage;
+            _saveData.CurrentStage = 0;
         }
-
-        public void SetStageData(int stage)
-        {
-            _saveData.CurrentStage = stage;
-        }
-
+        public int GetMaxStage() => _saveData.MaxStage;
+        public void SetCurrentStage(int stage) => _saveData.CurrentStage = stage;
         public int GetCurrentStage() => _saveData.CurrentStage;
+        #endregion
     }
 }

@@ -1,0 +1,139 @@
+[
+  {
+    "Key": "0",
+    "StageId": 0,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "temp": [
+      {
+        "hp": 1,
+        "mp": 1
+      },
+      {
+        "hp": 2,
+        "mp": 2
+      }
+    ],
+    "ai": [
+      {
+        "at": 1,
+        "df": 1
+      }
+    ]
+  },
+  {
+    "Key": "1",
+    "StageId": 1,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "temp": [
+      {
+        "hp": 3,
+        "mp": 3
+      },
+      {
+        "hp": 4,
+        "mp": 4
+      }
+    ],
+    "ai": [
+      {
+        "at": 3,
+        "df": 3
+      },
+      {
+        "at": 4,
+        "df": 4
+      },
+      {
+        "at": 5,
+        "df": 5
+      }
+    ]
+  },
+  {
+    "Key": "2",
+    "StageId": 2,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "temp": [
+      {
+        "hp": 6,
+        "mp": 6
+      }
+    ],
+    "ai": [
+      {
+        "at": 6,
+        "df": 6
+      }
+    ]
+  },
+  {
+    "Key": "3",
+    "StageId": 3,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "temp": [
+      {
+        "hp": 7,
+        "mp": 7
+      }
+    ],
+    "ai": [
+      {
+        "at": 7
+      }
+    ]
+  },
+  {
+    "Key": "4",
+    "StageId": 4,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "temp": [
+      {
+        "hp": 8,
+        "mp": 8
+      }
+    ],
+    "ai": [
+      {
+        "at": 8,
+        "df": 8
+      }
+    ]
+  },
+  {
+    "Key": "5",
+    "StageId": 5,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "temp": [
+      {
+        "hp": 9,
+        "mp": 9
+      },
+      {
+        "hp": 10,
+        "mp": 10
+      }
+    ],
+    "ai": [
+      {
+        "at": 9,
+        "df": 9
+      },
+      {
+        "at": 10,
+        "df": 10
+      }
+    ]
+  }
+]

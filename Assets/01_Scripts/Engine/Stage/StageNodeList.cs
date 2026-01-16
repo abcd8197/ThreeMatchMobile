@@ -53,7 +53,7 @@ namespace ThreeMatch
 
         private void CreateNodes()
         {
-            int maxStage = Main.Instance.GetManager<StageManager>().MaxStage;
+            int maxStage = Main.Instance.GetManager<StageManager>().GetMaxStage();
             for (int i = 0; i < _nodeLocalPositions.Count * backgrounds.Length; i++)
             {
                 StageNode node;
@@ -98,7 +98,7 @@ namespace ThreeMatch
                 return;
 
             int stage = 0;
-            int maxStage = Main.Instance.GetManager<StageManager>().MaxStage;
+            int maxStage = Main.Instance.GetManager<StageManager>().GetMaxStage();
             int nodePerBackground = _nodeLocalPositions.Count;
             int backgroundCount = backgrounds.Length;
 

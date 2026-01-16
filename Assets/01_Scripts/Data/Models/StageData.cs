@@ -6,9 +6,16 @@ namespace ThreeMatch
     [Serializable]
     public class StageData
     {
-        public int Stage;
+        public int StageId;
+
+        public byte Width = 9;
+        public byte Height = 9;
+
         public int MoveLimit;
-        public List<StageClearData> StageClearConditions;
-        public List<FixedCellData> FixedCells;
+        public List<StageGoalData> Goals = new();
+        public List<StageFixedCellData> FixedCells = new();
+        public StageSpawnRuleData SpawnRule;
+
+        public StageData() { }
     }
 }

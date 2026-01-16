@@ -2,11 +2,11 @@ namespace ThreeMatch
 {
     public enum CellType
     {
-        Normal,
+        Normal = 0,
         Hole,
-        Spawner,
-        PortalIn,
-        PortalOut,
         Blocked,
+        Spawner,
+        PortarIn,
+        PortarOut,
     }
 }

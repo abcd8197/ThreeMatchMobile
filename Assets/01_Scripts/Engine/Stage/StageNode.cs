@@ -39,7 +39,7 @@ namespace ThreeMatch
 
             if (!uiManager.IsPopupActivated(PopupType.StageEnterPopup))
             {
-                Main.Instance.GetManager<StageManager>().SetStageData(_stage);
+                Main.Instance.GetManager<StageManager>().SetCurrentStage(_stage);
                 uiManager.ShowPopup(PopupType.StageEnterPopup);
             }
         }
