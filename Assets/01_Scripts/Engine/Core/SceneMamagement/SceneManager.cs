@@ -11,8 +11,6 @@ namespace ThreeMatch
         private Dictionary<Type, ISceneChangeNotifyModule> _modules = new();
         public SceneType CurrentSceneType { get; private set; } = SceneType.Title;
 
-        public Type ModuleType => typeof(ISceneChangeNotifyModule);
-
         public SceneManager()
         {
 
@@ -24,8 +22,7 @@ namespace ThreeMatch
                 CoroutineHandler.Instance.StopCoroutine(_sceneLoadCoroutine);
         }
 
-        public void Register(IModule module) => RegisterModule((ISceneChangeNotifyModule)module);
-        public void RegisterModule(ISceneChangeNotifyModule module)
+        public void Register(ISceneChangeNotifyModule module)
         {
             var type = module.GetType();
             if (!_modules.ContainsKey(type))

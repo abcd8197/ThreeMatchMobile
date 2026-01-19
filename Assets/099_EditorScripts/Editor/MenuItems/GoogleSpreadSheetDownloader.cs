@@ -179,9 +179,12 @@ namespace ThreeMatch.Editor
             if (GUILayout.Button("Download SheetDatas"))
             {
                 Debug.Log("Start Sheet Download");
+                int temp = 1;
                 foreach (var sheetData in _sheetDatas)
                 {
+                    Debug.Log($"Downloading.. ({temp}/{_sheetDatas.Count})");
                     var csv = await RequestSheetData(sheetData.DocId, sheetData.GID);
+                    temp++;
                     WriteJson(csv, sheetData.Name);
                 }
                 Debug.Log("End of Sheet Download");

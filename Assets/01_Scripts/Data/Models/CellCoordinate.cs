@@ -7,6 +7,12 @@ namespace ThreeMatch
         public readonly byte X;
         public readonly byte Y;
 
+        public CellCoordinate(byte x, byte y)
+        { 
+            X = x;
+            Y = y;
+        }
+
         public bool Equals(CellCoordinate other) => this.X == other.X && this.Y == other.Y;
         public override bool Equals(object obj) => obj is CellCoordinate other && Equals(other);
         public override int GetHashCode() => (X << 8) | Y;

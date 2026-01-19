@@ -15,7 +15,9 @@ namespace ThreeMatch
         private void Awake()
         {
             if (img_Icon != null)
-                img_Icon.sprite = Main.Instance.GetManager<AssetManager>().GetAsset<Sprite>(BundleGroup.defaultasset, _itemType.GetImageName());
+            {
+                img_Icon.sprite = Main.Instance.GetManager<AssetManager>().GetSprite(BundleGroup.defaultasset_tex, "defaultAtlas", _itemType.GetImageName());
+            }
             if (txt_Amount != null)
                 Main.Instance.GetManager<ItemManager>().Bind(_itemType, x => txt_Amount.text = x.ToString()).AddTo(this);
         }

@@ -12,6 +12,7 @@ namespace ThreeMatch
         public void ReleaseAssetPack(IEnumerable<BundleGroup> bundleList);
 
         public T GetAsset<T>(BundleGroup pack, string assetKey) where T : UnityEngine.Object;
+        public Sprite GetSprite(BundleGroup pack, string atlasName, string fileName);
         public GameObject GetPrefabInstance(BundleGroup pack, string assetKey, bool worldPositionStay = false, Transform parent = null);
         public T GetInstantiateComponent<T>(BundleGroup pack, string assetKey, bool worldPositionStay = false, Transform parent = null) where T : Component;
 

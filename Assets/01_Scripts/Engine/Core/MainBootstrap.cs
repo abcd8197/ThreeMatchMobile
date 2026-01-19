@@ -14,7 +14,7 @@ namespace ThreeMatch
             CreateAssetManager(main);
             main.RegisterManager(new SceneManager());
             main.RegisterManager(new UIManager(main.GetManager<AssetManager>()));
-            main.RegisterManager(new StageManager(ResourcesDataLoader.LoadData<StageData>("Datas/StageData")));
+            CreateStageManager(main);
             main.RegisterManager(new AuthManager());
             main.RegisterManager(new GameManager());
             main.RegisterManager(new ItemManager());
@@ -42,10 +42,26 @@ namespace ThreeMatch
             List<string> requiredPacks = new();
 #if UNITY_EDITOR
             assetService = new AddressableAssetService();
+            requiredPacks.Add("defaultasset_tex");
             requiredPacks.Add("defaultasset");
 #endif
             var assetManager = new AssetManager(assetService, requiredPacks);
             main.RegisterManager(assetManager);
+        }
+
+        private void CreateStageManager(Main main)
+        {
+            const string stageDataPath = "Datas/";
+
+            var stageManager = new StageManager();
+            stageManager.SetStageData(
+                ResourcesDataLoader.LoadDataToList<StageMetaData>(stageDataPath + "StageData"),
+                ResourcesDataLoader.LoadDataToList<StageGoalData>(stageDataPath + "StageGoalData"),
+                ResourcesDataLoader.LoadDataToList<StageFixedCellSetData>(stageDataPath + "StageFixedCellData"),
+                ResourcesDataLoader.LoadDataToList<StageSpawnRuleData>(stageDataPath + "StageSpawnRule")
+                );
+
+            main.RegisterManager(stageManager);
         }
     }
 }

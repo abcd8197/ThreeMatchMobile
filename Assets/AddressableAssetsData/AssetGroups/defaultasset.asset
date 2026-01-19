@@ -21,56 +21,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2574cc3d7228c8949b36a823ac889feb
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/img_ui_home.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 306210b7f30337b45b74632a7edb1a9b
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/Popup/SceneChangePopup.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 326035b7f7d35564c94dc338db330d75
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/greenBtnTapped.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 36e240bd65b0c7d42b92107db64b7509
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/Stemina.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 46ac623c0fd32bb428c6505328e793b3
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/Background.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 58b3e20877a59994baec5e5c5096db26
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/purpleBtnNormal.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5fe2c7ee806b7cf428dd22f29b66e1b7
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/img_ui_setting.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 669995300df51334890962bf20683b1a
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/whiteBG.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8f8c2fc2369cbf343bfdb753e0ec6d24
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/Diamond.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - defaultasset
@@ -81,26 +33,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b1c90ac2734fc70429832d9052e7b329
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/borderCircle.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b4ba9ebf9bca3664cb1659936210da22
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/TopPanelCanvas.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cd389e3c9cda89b41b04ef37b9d615c3
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/LineBomb.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - defaultasset
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d656f8231608e5e41a27655a1c56d16a
-    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/blueBG.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - defaultasset

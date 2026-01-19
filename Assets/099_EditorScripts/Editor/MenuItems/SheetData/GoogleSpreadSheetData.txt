@@ -1,1 +1,1 @@
-[{"Name":"StageData","DocId":"1LO5HBe51uxc0XIIVFbZQmwwf9uz66XyItLGJJq0E0Eo","GID":"0"}]
+[{"Name":"StageData","DocId":"1LO5HBe51uxc0XIIVFbZQmwwf9uz66XyItLGJJq0E0Eo","GID":"0"},{"Name":"StageSpawnRule","DocId":"1LO5HBe51uxc0XIIVFbZQmwwf9uz66XyItLGJJq0E0Eo","GID":"2140018770"},{"Name":"StageFixedCellData","DocId":"1LO5HBe51uxc0XIIVFbZQmwwf9uz66XyItLGJJq0E0Eo","GID":"536650871"},{"Name":"StageGoalData","DocId":"1LO5HBe51uxc0XIIVFbZQmwwf9uz66XyItLGJJq0E0Eo","GID":"563020021"}]

@@ -52,6 +52,9 @@ namespace ThreeMatch
         public T GetAsset<T>(BundleGroup pack, string assetName) where T : UnityEngine.Object
             => _assetService.GetAsset<T>(pack, assetName);
 
+        public Sprite GetSprite(BundleGroup pack, string assetName, string fileName)
+            => _assetService.GetSprite(pack, assetName, fileName);
+
         /// <summary>Return new Prefab Instance that Instantiated</summary>
         public GameObject GetPrefabInstance(BundleGroup pack, string assetKey, bool worldPositionStay = false, Transform parent = null)
             => _assetService.GetPrefabInstance(pack, assetKey, worldPositionStay, parent);

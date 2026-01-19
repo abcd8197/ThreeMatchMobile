@@ -10,16 +10,13 @@ namespace ThreeMatch
         private readonly Dictionary<Type, ISaveModule> _registeredModules = new();
         private readonly ISaveService _saveService;
 
-        public Type ModuleType => typeof(ISaveModule);
-
         public SaveManager(SaveData saveData, ISaveService saveService)
         {
             _saveData = saveData ?? new SaveData();
             _saveService = saveService;
         }
 
-        public void Register(IModule module) => RegisterModule((ISaveModule)module);
-        public void RegisterModule(ISaveModule module)
+        public void Register(ISaveModule module)
         {
             var type = module.GetType();
             if (_registeredModules.ContainsKey(type))

@@ -1,0 +1,37 @@
+[
+  {
+    "Key": "Collect_Color_Red_20",
+    "GoalType": "CollectColor",
+    "GoalValue": 30,
+    "TargetColor": "Red",
+    "TargetPieceType": "Normal"
+  },
+  {
+    "Key": "Collect_Color_Green_20",
+    "GoalType": "CollectColor",
+    "GoalValue": 30,
+    "TargetColor": "Green",
+    "TargetPieceType": "Normal"
+  },
+  {
+    "Key": "Collect_Color_Blue_20",
+    "GoalType": "CollectColor",
+    "GoalValue": 30,
+    "TargetColor": "Blue",
+    "TargetPieceType": "Normal"
+  },
+  {
+    "Key": "Collect_Color_Yellow_20",
+    "GoalType": "CollectColor",
+    "GoalValue": 30,
+    "TargetColor": "Yellow",
+    "TargetPieceType": "Normal"
+  },
+  {
+    "Key": "Collect_Color_Purple_20",
+    "GoalType": "CollectColor",
+    "GoalValue": 30,
+    "TargetColor": "Purple",
+    "TargetPieceType": "Normal"
+  }
+]

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 namespace ThreeMatch
 {
@@ -39,11 +41,29 @@ namespace ThreeMatch
 
         private void RegisterModule(IModule module)
         {
-            foreach (var manager in _globalManagers)
+            var moduleType = module.GetType();
+
+            foreach (var manager in _globalManagers.Values)
             {
-                if (manager.Value is not IModuleRegistrar r) continue;
-                if (!r.ModuleType.Equals(module.ModuleType)) continue;
-                r.Register(module);
+                var managerType = manager.GetType();
+
+                if (moduleType == managerType)
+                    continue;
+
+                var registrarIfaces = managerType.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IModuleRegistrar<>));
+
+                foreach (var iface in registrarIfaces)
+                {
+                    var t = iface.GetGenericArguments()[0];
+                    if (!t.IsAssignableFrom(moduleType))
+                        continue;
+
+                    var method = iface.GetMethod(nameof(IModuleRegistrar<IModule>.Register));
+                    if (method == null)
+                        continue;
+
+                    method.Invoke(manager, new object[] { module });
+                }
             }
         }
 

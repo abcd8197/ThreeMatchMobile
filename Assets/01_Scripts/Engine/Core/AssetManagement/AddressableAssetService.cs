@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -12,6 +13,7 @@ namespace ThreeMatch
     public class AddressableAssetService : IAssetService
     {
         private readonly Dictionary<BundleGroup, Dictionary<string, AssetData>> _loadedAssetDatas = new();
+        private readonly Dictionary<BundleGroup, Dictionary<string, SpriteAtlas>> _loadedAltases = new();
         private readonly object _lock = new();
 
         public void Dispose()
@@ -93,6 +95,11 @@ namespace ThreeMatch
                     dictAssetNumber.Add(kv.Key, 0);
                     foreach (var location in kv.Value.Result)
                     {
+                        if (location.ResourceType == typeof(Sprite) || location.ResourceType == typeof(Texture2D))
+                        {
+                            totalAssetCount--;
+                            continue;
+                        }
                         queue.Enqueue((kv.Key, location));
                         dictAssetNumber[kv.Key]++;
                     }
@@ -127,7 +134,7 @@ namespace ThreeMatch
                             item = queue.Dequeue();
                         }
 
-                        await LoadAssetAsync(item.Item1, item.Item2, ct);
+                        await LoadAssetAsync(item.Item1, item.Item2, item.Item1.ToString().EndsWith("_tex"), ct);
 
                         lock (dickLock)
                         {
@@ -157,29 +164,61 @@ namespace ThreeMatch
             }
         }
 
-        private async Task LoadAssetAsync(BundleGroup pack, IResourceLocation location, CancellationToken ct = default)
+        private async Task LoadAssetAsync(BundleGroup pack, IResourceLocation location, bool isAtlas, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
 
-            var h = Addressables.LoadAssetAsync<object>(location);
-            await h.Task;
+            if (isAtlas)
+            {
+                if (location.ResourceType != typeof(SpriteAtlas))
+                    Debug.LogError("It is not SpriteAtlas!");
+                var h = Addressables.LoadAssetAsync<SpriteAtlas>(location);
+                await h.Task;
 
-            if (h.Status != AsyncOperationStatus.Succeeded || !h.IsValid())
-                throw new Exception($"LoadAssetAsync failed. pack={pack}, key={location.PrimaryKey}");
+                if (h.Status != AsyncOperationStatus.Succeeded || !h.IsValid())
+                    throw new Exception($"LoadAssetAsync failed. pack={pack}, key={location.PrimaryKey}");
+                StoreAssetData(pack, location, h, isAtlas);
+            }
+            else
+            {
+                var h = Addressables.LoadAssetAsync<object>(location);
+                await h.Task;
 
+                if (h.Status != AsyncOperationStatus.Succeeded || !h.IsValid())
+                    throw new Exception($"LoadAssetAsync failed. pack={pack}, key={location.PrimaryKey}");
+                StoreAssetData(pack, location, h, isAtlas);
+            }
+        }
+
+        private void StoreAssetData(BundleGroup pack, IResourceLocation location, AsyncOperationHandle opHandle, bool isAtlas)
+        {
             lock (_lock)
             {
-                if (!_loadedAssetDatas.TryGetValue(pack, out var dict))
+                if (isAtlas)
                 {
-                    dict = new Dictionary<string, AssetData>();
-                    _loadedAssetDatas[pack] = dict;
+                    if(!_loadedAltases.TryGetValue(pack, out var dict))
+                    {
+                        dict = new();
+                        _loadedAltases[pack] = dict;
+                    }
+
+                    string[] seperated = location.PrimaryKey.Split('.')[0].Split('/');
+                    string fileName = seperated[seperated.Length - 1];
+                    dict[fileName] = opHandle.Result as SpriteAtlas;
                 }
+                else
+                {
+                    if (!_loadedAssetDatas.TryGetValue(pack, out var dict))
+                    {
+                        dict = new();
+                        _loadedAssetDatas[pack] = dict;
+                    }
 
-                string[] seperated = location.PrimaryKey.Split('.')[0].Split('/');
-                string fileName = seperated[seperated.Length - 1];
-                dict[fileName] = new AssetData(h);
+                    string[] seperated = location.PrimaryKey.Split('.')[0].Split('/');
+                    string fileName = seperated[seperated.Length - 1];
+                    dict[fileName] = new AssetData(opHandle);
+                }
             }
-
         }
         #endregion
 
@@ -200,8 +239,33 @@ namespace ThreeMatch
 
             assetData.RefCount++;
             return assetData.Handler.Result as T;
-
         }
+
+        public Sprite GetSprite(BundleGroup pack, string atlasName, string fileName)
+        {
+            if (!_loadedAltases.TryGetValue(pack, out var dict))
+            {
+                Debug.LogError($"{pack} is Not Loaded.");
+                return null;
+            }
+
+            if (!dict.TryGetValue(atlasName, out var atlas))
+            {
+                Debug.LogError($"{pack} is Not Loaded.");
+                return null;
+            }
+
+            var sprite = atlas.GetSprite(fileName);
+
+            if(sprite == null)
+            {
+                Debug.LogError($"{pack}/{atlasName}/{fileName} is not exist.");
+                return null;
+            }
+
+            return sprite;
+        }
+
         public GameObject GetPrefabInstance(BundleGroup pack, string assetKey, bool worldPositionStay = false, Transform parent = null)
         {
             var prefab = GetAsset<GameObject>(pack, assetKey);

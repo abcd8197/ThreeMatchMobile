@@ -11,15 +11,10 @@ namespace ThreeMatch
 
         public Type ModuleType => typeof(ISaveModule);
 
-        public StageManager(List<StageData> datas)
+        public void SetStageData(List<StageMetaData> stageDatas, List<StageGoalData> goalData, List<StageFixedCellSetData> fixedCellDatas, List<StageSpawnRuleData> ruleDatas)
         {
-            _stageData.AddRange(datas);
-        }
-
-        private void LoadStageData(string json)
-        {
-            // StageData에 필요한 데이터들 Load
-
+            _stageData?.Clear();
+            _stageData.AddRange(StageManagerDataResolver.Resolve(stageDatas, goalData, fixedCellDatas, ruleDatas));
         }
 
         public void Dispose()

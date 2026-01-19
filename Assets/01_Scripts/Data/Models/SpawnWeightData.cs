@@ -3,7 +3,7 @@ using System;
 namespace ThreeMatch
 {
     [Serializable]
-    public class SpawnWeightData
+    public sealed class SpawnWeightData
     {
         public ColorType Color;
         public int Weight;

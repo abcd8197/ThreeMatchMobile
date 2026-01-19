@@ -28,7 +28,7 @@ namespace ThreeMatch
         private void SetRandomTipImage()
         {
             string rndSpriteName = spriteNames[Random.Range(0, spriteNames.Length)];
-            var rndSprite = Main.Instance.GetManager<AssetManager>().GetAsset<Sprite>(BundleGroup.defaultasset, rndSpriteName);
+            var rndSprite = Main.Instance.GetManager<AssetManager>().GetSprite(BundleGroup.defaultasset_tex, "defaultAtlas", rndSpriteName);
         }
     }
 }

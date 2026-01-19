@@ -1,0 +1,47 @@
+[
+  {
+    "Key": "ThreeColor",
+    "Colors": [
+      "Red",
+      "Blue",
+      "Green"
+    ],
+    "Weights": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "Key": "FourColor",
+    "Colors": [
+      "Red",
+      "Blue",
+      "Green",
+      "Yellow"
+    ],
+    "Weights": [
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "Key": "FiveColor",
+    "Colors": [
+      "Red",
+      "Blue",
+      "Green",
+      "Yellow",
+      "Purple"
+    ],
+    "Weights": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  }
+]

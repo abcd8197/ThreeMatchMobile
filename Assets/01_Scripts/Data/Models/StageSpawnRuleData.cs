@@ -4,14 +4,10 @@ using System.Collections.Generic;
 namespace ThreeMatch
 {
     [Serializable]
-    public class StageSpawnRuleData
+    public sealed class StageSpawnRuleData
     {
-        public int UsedColorCount = 5;
-        public List<SpawnWeightData> ColorWeights = new();
-
-        public StageSpawnRuleData()
-        {
-
-        }
+        public string Key;
+        public List<ColorType> Colors = new();
+        public List<float> Weights = new();
     }
 }

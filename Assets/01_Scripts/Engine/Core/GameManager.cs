@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ThreeMatch
 {
-    public class GameManager : IManager, ISceneChangeNotifyModule
+    public class GameManager : IModuleRegistrar<IGameNotifyModule>, ISceneChangeNotifyModule
     {
         private RaycastHandler _raycastHandler;
-        public Type ModuleType => typeof(ISceneChangeNotifyModule);
+        private readonly Dictionary<Type, IGameNotifyModule> _gameNotifyModules = new();
+        public float GameSpeed { get; private set; } = 1f;
 
         public GameManager()
         {
@@ -20,9 +22,16 @@ namespace ThreeMatch
             _raycastHandler.RaycastEnabled(false);
         }
 
-        public void StartGame()
+        #region ## IModuleRegistrar<IGameNotifyModule> ##
+        public void Register(IGameNotifyModule module)
         {
-
+            var type = module.GetType();
+            if (_gameNotifyModules.ContainsKey(type))
+            {
+                Debug.LogWarning($"{nameof(IGameNotifyModule)} of type {type} is already registered.");
+                return;
+            }
+            _gameNotifyModules[type] = module;
         }
 
 
@@ -31,7 +40,9 @@ namespace ThreeMatch
             if (_raycastHandler != null)
                 UnityEngine.Object.DestroyImmediate(_raycastHandler);
         }
+        #endregion
 
+        #region ## ISceneChangeNotifyModule ##
         public void OnStartSceneChange(SceneType fromScene, SceneType toScene)
         {
 
@@ -51,5 +62,25 @@ namespace ThreeMatch
                     break;
             }
         }
+        #endregion
+
+        #region ## API ##
+        private void OnChangedGameState(GameState state)
+        {
+            foreach (var module in _gameNotifyModules.Values)
+                module?.OnChangedGameState(state);
+        }
+
+        private void OnGamePaused(bool paused)
+        {
+            foreach (var module in _gameNotifyModules.Values)
+                module?.OnGamePaused(paused);
+        }
+
+        public void StartGame()
+        {
+            OnChangedGameState(GameState.Start);
+        }
+        #endregion
     }
 }

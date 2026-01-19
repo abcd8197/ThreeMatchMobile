@@ -7,7 +7,7 @@ namespace ThreeMatch
 {
     public static class ResourcesDataLoader
     {
-        public static List<T> LoadData<T>(string filePath)
+        public static List<T> LoadDataToList<T>(string filePath)
         {
             var textAsset = Resources.Load<TextAsset>(filePath);
 

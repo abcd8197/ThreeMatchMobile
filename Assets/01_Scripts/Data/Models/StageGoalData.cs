@@ -3,11 +3,11 @@ using System;
 namespace ThreeMatch
 {
     [Serializable]
-    public class StageGoalData
+    public sealed class StageGoalData
     {
+        public string Key;
         public StageGoalType GoalType;
         public int GoalValue;
-
         public ColorType TargetColor;
         public PieceType TargetPieceType;
 

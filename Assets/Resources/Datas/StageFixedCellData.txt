@@ -1,0 +1,152 @@
+[
+  {
+    "Key": "TopSpawn",
+    "Cells": [
+      {
+        "X": 0,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Red",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 1,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Red",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 2,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Green",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 3,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Green",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 4,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Blue",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 5,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Blue",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 6,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Red",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 7,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Red",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 8,
+        "Y": 8,
+        "CellType": "Spawner",
+        "Color": "Green",
+        "PieceType": "Normal",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      }
+    ]
+  },
+  {
+    "Key": "Center_Cross",
+    "Cells": [
+      {
+        "X": 3,
+        "Y": 4,
+        "CellType": "Hole",
+        "Color": "None",
+        "PieceType": "None",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 4,
+        "Y": 4,
+        "CellType": "Hole",
+        "Color": "None",
+        "PieceType": "None",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 5,
+        "Y": 4,
+        "CellType": "Hole",
+        "Color": "None",
+        "PieceType": "None",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 4,
+        "Y": 3,
+        "CellType": "Hole",
+        "Color": "None",
+        "PieceType": "None",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      },
+      {
+        "X": 4,
+        "Y": 5,
+        "CellType": "Hole",
+        "Color": "None",
+        "PieceType": "None",
+        "HP": 1,
+        "PortalOutX": 0,
+        "PortalOutY": 0
+      }
+    ]
+  }
+]

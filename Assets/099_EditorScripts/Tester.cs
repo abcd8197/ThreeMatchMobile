@@ -19,6 +19,7 @@ namespace ThreeMatch
         private void OnDestroy()
         {
             clickAction.performed -= ClickAction_performed;
+            clickAction = null;
         }
 
         private void ClickAction_performed(InputAction.CallbackContext obj)
