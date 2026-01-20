@@ -60,7 +60,7 @@ namespace ThreeMatch
                 int backgroundIndex = Mathf.FloorToInt(i / _nodeLocalPositions.Count);
                 node = _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageNode", false, backgrounds[backgroundIndex].transform).GetComponent<StageNode>();
                 node.transform.localPosition = _nodeLocalPositions[i % _nodeLocalPositions.Count];
-                node.SetData(i + 1, maxStage);
+                node.SetData(i, maxStage);
                 stageNodes.Add(node.GetComponent<StageNode>());
             }
         }

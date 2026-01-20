@@ -12,7 +12,7 @@ namespace ThreeMatch
         public void SetData(int stage, int maxStage)
         {
             _stage = stage;
-            sp_Back.color = stage < maxStage ? Color.white : Color.gray;
+            sp_Back.color = stage <= maxStage ? Color.white : Color.gray;
             txt_Stage.text = stage.ToString();
         }
 

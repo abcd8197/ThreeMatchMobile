@@ -4,8 +4,9 @@ namespace ThreeMatch
 {
     public class UIRoot : MonoBehaviour
     {
-        private TitleCanvas _titleCanvas;
         private AssetManager _assetManager;
+        private TitleCanvas _titleCanvas;
+        private BoardRoot _boardRoot;
         private GameObject TopPanelCanvas;
         public Transform PopupRoot { get; private set; }
 
@@ -29,6 +30,9 @@ namespace ThreeMatch
             if (sceneType != SceneType.Main && TopPanelCanvas != null)
                 Destroy(TopPanelCanvas);
 
+            if (sceneType != SceneType.Game && _boardRoot != null)
+                Destroy(_boardRoot.gameObject);
+
             switch (sceneType)
             {
                 case SceneType.Empty:
@@ -40,6 +44,7 @@ namespace ThreeMatch
                     _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageRoot");
                     break;
                 case SceneType.Game:
+                    _boardRoot = _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "BoardRoot", parent: transform).GetComponent<BoardRoot>();
                     break;
             }
         }

@@ -7,8 +7,12 @@ namespace ThreeMatch
     {
         private void Awake()
         {
+            if (Main.IsInitialized)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
             var main = Main.Instance;
-            main.Initialize();
 
             CreateSaveManager(main);
             CreateAssetManager(main);

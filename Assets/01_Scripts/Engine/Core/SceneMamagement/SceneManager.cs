@@ -37,7 +37,7 @@ namespace ThreeMatch
 
         private IEnumerator LoadSceneCoroutine(SceneType sceneType)
         {
-            OnNitifyStartSceneChange(CurrentSceneType, sceneType);
+            OnNotifyStartSceneChange(CurrentSceneType, sceneType);
 
             AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync((int)SceneType.Empty);
             asyncOperation.allowSceneActivation = true;
@@ -73,7 +73,7 @@ namespace ThreeMatch
             OnNotifySceneChanged(CurrentSceneType);
         }
 
-        private void OnNitifyStartSceneChange(SceneType fromScene, SceneType toScene)
+        private void OnNotifyStartSceneChange(SceneType fromScene, SceneType toScene)
         {
             foreach (var module in _modules.Values)
                 module?.OnStartSceneChange(fromScene, toScene);

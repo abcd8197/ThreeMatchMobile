@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset_tex
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3202bce6295f94043be48979e3d464bc
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/img_cell_bomb.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 326035b7f7d35564c94dc338db330d75
     m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/greenBtnTapped.png
     m_ReadOnly: 0
@@ -69,8 +75,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset_tex
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a05dd446672ca7441af0cc35c4af8e1f
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/img_cell_rocketcol.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b1c90ac2734fc70429832d9052e7b329
     m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/borderCircle.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c301e36ea2be9c54da0c4cc5cd2dba3e
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/img_cell_normal.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - defaultasset_tex
@@ -81,8 +99,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset_tex
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce07e2d6b0f8fae4da7cd336218b73f1
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/img_cell_blocked.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d656f8231608e5e41a27655a1c56d16a
     m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/blueBG.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dab993d46881e9d4db529dd17aebc7f7
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/img_cell_rocketrow.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5ecb502a929a3042a9b9394f3a6f2b7
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/img_cell_rainbow.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - defaultasset_tex

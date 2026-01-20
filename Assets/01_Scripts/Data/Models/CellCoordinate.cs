@@ -2,7 +2,7 @@ using System;
 
 namespace ThreeMatch
 {
-    public struct CellCoordinate : IEquatable<CellCoordinate>
+    public readonly struct CellCoordinate : IEquatable<CellCoordinate>
     {
         public readonly byte X;
         public readonly byte Y;
@@ -17,5 +17,8 @@ namespace ThreeMatch
         public override bool Equals(object obj) => obj is CellCoordinate other && Equals(other);
         public override int GetHashCode() => (X << 8) | Y;
         public override string ToString() => $"({X},{Y})";
+
+        public static bool operator ==(CellCoordinate a, CellCoordinate b) => a.Equals(b);
+        public static bool operator !=(CellCoordinate a, CellCoordinate b) => !a.Equals(b);
     }
 }

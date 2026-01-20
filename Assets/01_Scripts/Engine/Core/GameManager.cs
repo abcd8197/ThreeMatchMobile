@@ -6,8 +6,9 @@ namespace ThreeMatch
 {
     public class GameManager : IModuleRegistrar<IGameNotifyModule>, ISceneChangeNotifyModule
     {
-        private RaycastHandler _raycastHandler;
         private readonly Dictionary<Type, IGameNotifyModule> _gameNotifyModules = new();
+
+        private RaycastHandler _raycastHandler;
         public float GameSpeed { get; private set; } = 1f;
 
         public GameManager()

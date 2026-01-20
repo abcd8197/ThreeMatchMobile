@@ -9,13 +9,9 @@ namespace ThreeMatch
     {
         private static readonly Lazy<Main> _lazy = new(() => new Main());
         public static Main Instance = _lazy.Value;
+        public static bool IsInitialized = false;
 
         private readonly Dictionary<Type, IManager> _globalManagers = new();
-
-        public void Initialize()
-        {
-
-        }
 
         public void Build()
         {
@@ -26,6 +22,7 @@ namespace ThreeMatch
             }
 
             (_globalManagers[typeof(SaveManager)] as SaveManager).InitializeSaveData();
+            IsInitialized = true;
         }
 
         public void RegisterManager<T>(T manager) where T : IManager

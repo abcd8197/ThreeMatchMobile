@@ -45,6 +45,10 @@ namespace ThreeMatch
         public int GetMaxStage() => _saveData.MaxStage;
         public void SetCurrentStage(int stage) => _saveData.CurrentStage = stage;
         public int GetCurrentStage() => _saveData.CurrentStage;
+
+
+        public StageData GetStageData(int stageId) => _stageData[stageId];
+        public StageData GetCurrentStageData() => GetStageData(GetCurrentStage() - 1);
         #endregion
     }
 }

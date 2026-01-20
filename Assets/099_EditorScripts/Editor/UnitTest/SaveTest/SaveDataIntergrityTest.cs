@@ -11,7 +11,6 @@ namespace ThreeMatch.UnitTest
         public void SetUp()
         {
             var main = Main.Instance;
-            main.Initialize();
             SetUpSave(main);
             main.GetManager<SaveManager>().InitializeSaveData();
         }

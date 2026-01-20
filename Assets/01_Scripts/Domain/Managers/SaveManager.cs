@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ThreeMatch
 {
@@ -21,7 +20,6 @@ namespace ThreeMatch
             var type = module.GetType();
             if (_registeredModules.ContainsKey(type))
             {
-                Debug.LogWarning($"Save module of type {type} is already registered.");
                 return;
             }
             _registeredModules[type] = module;
