@@ -13,16 +13,17 @@ namespace ThreeMatch
 
         public override PopupType PopupType => PopupType.SceneChangePopup;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            DontDestroyOnLoad(this.gameObject);
-        }
-
         public override void Show(int sortingOrder)
         {
             base.Show(sortingOrder);
             SetRandomTipImage();
+            Main.Instance.GetManager<GameManager>().RaycastEnabled(false);
+        }
+
+        public override void Hide(System.Action<PopupBase> hideCompleteAction)
+        {
+            base.Hide(hideCompleteAction);
+            Main.Instance.GetManager<GameManager>().RaycastEnabled(true);
         }
 
         private void SetRandomTipImage()

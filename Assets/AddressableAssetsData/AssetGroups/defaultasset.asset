@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7eb4fc0b8a642654d8e161fc022d0d82
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/Object/BoardView.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a4d99dbcc6621048973cf8c01c32d0a
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/Popup/StageEnterPopup.prefab
     m_ReadOnly: 0
@@ -35,6 +41,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b4ba9ebf9bca3664cb1659936210da22
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/TopPanelCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7699b7fce10e494bb7b35fd18f9171f
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/Object/BoardCell.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - defaultasset

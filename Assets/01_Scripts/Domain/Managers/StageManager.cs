@@ -25,7 +25,11 @@ namespace ThreeMatch
         #region ## ISaveModule ##
         public void InitializeSaveData(SaveData saveData)
         {
-            saveData.StageSaveData ??= new();
+            if (saveData.StageSaveData == null)
+            {
+                saveData.StageSaveData = new();
+                saveData.StageSaveData.MaxStage = 0;
+            }
             _saveData = saveData.StageSaveData;
         }
 
@@ -48,7 +52,7 @@ namespace ThreeMatch
 
 
         public StageData GetStageData(int stageId) => _stageData[stageId];
-        public StageData GetCurrentStageData() => GetStageData(GetCurrentStage() - 1);
+        public StageData GetCurrentStageData() => GetStageData(GetCurrentStage());
         #endregion
     }
 }

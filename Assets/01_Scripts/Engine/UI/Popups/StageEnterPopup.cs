@@ -29,7 +29,8 @@ namespace ThreeMatch
             if (Main.Instance.GetManager<ItemManager>().GetItemCount(ItemType.Stemina) > 0)
             {
                 Main.Instance.GetManager<ItemManager>().UseItem(ItemType.Stemina, 1);
-                Main.Instance.GetManager<GameManager>().StartGame();
+                Main.Instance.GetManager<SceneManager>().LoadScene(SceneType.Game);
+                Main.Instance.GetManager<UIManager>().HidePopup(PopupType);
             }
         }
 

@@ -4,5 +4,6 @@ namespace ThreeMatch
     {
         public void OnChangedGameState(GameState state);
         public void OnGamePaused(bool paused);
+        public void OnChangedGameSpeed(float speed);
     }
 }

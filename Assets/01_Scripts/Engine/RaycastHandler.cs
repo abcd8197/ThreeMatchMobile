@@ -21,6 +21,8 @@ namespace ThreeMatch
         private Vector2 _prevScreenPos;
         private Vector2 _currScreenPos;
 
+        private int _enabeldCount = 0;
+
         public Vector2 DragDelta { get; private set; }
         private void Awake()
         {
@@ -101,9 +103,9 @@ namespace ThreeMatch
                 _current.OnEndDrag();
 
             _current.OnPointerUp();
-            
+
             var topRaycastable = RaycastTopRaycastable(screenPos);
-            
+
             if (_current == topRaycastable)
                 _current.OnPointerClick();
 
@@ -147,7 +149,11 @@ namespace ThreeMatch
         }
 
         public void UpdateCurrentMainCamera() => _cam = Camera.main;
-        public void RaycastEnabled(bool enabled) => _raycastEnabled = enabled;
+        public void RaycastEnabled(bool enabled)
+        {
+            _enabeldCount += enabled ? -1 : +1;
+            _raycastEnabled = _enabeldCount <= 0;
+        }
     }
 }
 

@@ -71,6 +71,7 @@ namespace ThreeMatch
 
             CurrentSceneType = sceneType;
             OnNotifySceneChanged(CurrentSceneType);
+            _sceneLoadCoroutine = null;
         }
 
         private void OnNotifyStartSceneChange(SceneType fromScene, SceneType toScene)

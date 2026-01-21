@@ -20,7 +20,6 @@ namespace ThreeMatch
         {
             _raycastHandler = new GameObject("RaycastHandler").AddComponent<RaycastHandler>();
             UnityEngine.Object.DontDestroyOnLoad(_raycastHandler);
-            _raycastHandler.RaycastEnabled(false);
         }
 
         #region ## IModuleRegistrar<IGameNotifyModule> ##
@@ -54,9 +53,13 @@ namespace ThreeMatch
             switch (sceneType)
             {
                 case SceneType.Main:
+                    _raycastHandler.RaycastEnabled(true);
+                    _raycastHandler.UpdateCurrentMainCamera();
+                    break;
                 case SceneType.Game:
                     _raycastHandler.RaycastEnabled(true);
                     _raycastHandler.UpdateCurrentMainCamera();
+                    OnChangedGameState(GameState.Start);
                     break;
                 default:
                     _raycastHandler.RaycastEnabled(false);
@@ -65,7 +68,6 @@ namespace ThreeMatch
         }
         #endregion
 
-        #region ## API ##
         private void OnChangedGameState(GameState state)
         {
             foreach (var module in _gameNotifyModules.Values)
@@ -77,10 +79,15 @@ namespace ThreeMatch
             foreach (var module in _gameNotifyModules.Values)
                 module?.OnGamePaused(paused);
         }
+        #region ## API ##
+        public void RaycastEnabled(bool enabled) => _raycastHandler.RaycastEnabled(enabled);
 
-        public void StartGame()
+        public void ChangeGameSpeed(float speed)
         {
-            OnChangedGameState(GameState.Start);
+            GameSpeed = speed;
+
+            foreach (var module in _gameNotifyModules.Values)
+                module?.OnChangedGameSpeed(GameSpeed);
         }
         #endregion
     }

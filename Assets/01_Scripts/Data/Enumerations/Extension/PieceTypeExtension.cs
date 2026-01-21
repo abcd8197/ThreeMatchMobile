@@ -2,17 +2,25 @@ namespace ThreeMatch
 {
     public static class PieceTypeExtension
     {
-        public static string GetImageName(this PieceType type)
+        public static string GetImageName(this PieceType type, int param = 0)
         {
             return type switch
             {
-                PieceType.Normal => "img_cell_normal",
-                PieceType.Blocked => "img_cell_blocked",
-                PieceType.RocketRow => "img_cell_rocketrow",
-                PieceType.RocketCol => "img_cell_rocketcol",
-                PieceType.Bomb => "img_cell_bomb",
-                PieceType.Rainbow => "img_cell_rainbow",
-                _ => ""
+                PieceType.Normal => (ColorType)param switch
+                {
+                    ColorType.Red => "piece_normal_red",
+                    ColorType.Green => "piece_normal_green",
+                    ColorType.Blue => "piece_normal_blue",
+                    ColorType.Yellow => "piece_normal_yellow",
+                    ColorType.Purple => "piece_normal_purple",
+                    _ => "Invalid Color param"
+                },
+                PieceType.Ice => param == 0 ? "piece_ice_0" : "piece_ice_1",
+                PieceType.RocketRow => "piece_rocket_row",
+                PieceType.RocketCol => "piece_rocket_col",
+                PieceType.Bomb => "piece_bomb",
+                PieceType.Rainbow => "piece_rainbow",
+                _ => "Invalid piece Type"
             };
         }
 

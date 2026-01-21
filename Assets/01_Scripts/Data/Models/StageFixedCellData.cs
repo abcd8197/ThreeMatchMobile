@@ -34,6 +34,18 @@ namespace ThreeMatch
             this.HP = hp;
             this.PortalOutCoord = new CellCoordinate(portalOutX, portalOutY);
         }
+
+        public BoardCellData ToBoardCellData(int width)
+        {
+            return new BoardCellData()
+            {
+                CellID = Coord.ToIndex(width),
+                CellType = CellType,
+                ColorType = Color,
+                PieceType = PieceType,
+                Coordinate = Coord
+            };
+        }
     }
 
     public sealed class StageFixedCellDataJsonConverter : JsonConverter
