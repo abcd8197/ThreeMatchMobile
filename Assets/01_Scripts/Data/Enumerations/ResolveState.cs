@@ -1,12 +1,14 @@
 namespace ThreeMatch
 {
-    public enum CellResolveState
+    public enum ResolveState
     {
         None,
-        Move,
         Swap,
         Fall,
+        Removed,
+        Spawned,
         Damaged,
         Merged,
+        Shake,
     }
 }

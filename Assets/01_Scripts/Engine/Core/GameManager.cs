@@ -9,6 +9,7 @@ namespace ThreeMatch
         private readonly Dictionary<Type, IGameNotifyModule> _gameNotifyModules = new();
 
         private RaycastHandler _raycastHandler;
+        private BoardController _boardController;
         public float GameSpeed { get; private set; } = 1f;
 
         public GameManager()
@@ -50,6 +51,9 @@ namespace ThreeMatch
 
         public void OnSceneChanged(SceneType sceneType)
         {
+            if (sceneType != SceneType.Game)
+                _boardController?.Dispose();
+
             switch (sceneType)
             {
                 case SceneType.Main:
@@ -59,6 +63,7 @@ namespace ThreeMatch
                 case SceneType.Game:
                     _raycastHandler.RaycastEnabled(true);
                     _raycastHandler.UpdateCurrentMainCamera();
+                    CreateBoardController();
                     OnChangedGameState(GameState.Start);
                     break;
                 default:
@@ -67,6 +72,19 @@ namespace ThreeMatch
             }
         }
         #endregion
+
+        private void CreateBoardController()
+        {
+            if (_boardController != null)
+                return;
+
+            IBoardView boardView = null;
+            if (Application.isPlaying)
+                boardView = Main.Instance.GetManager<AssetManager>().GetInstantiateComponent<BoardView>(BundleGroup.defaultasset, "BoardView");
+            _boardController = new();
+            _boardController.SetBoardView(boardView);
+        }
+
 
         private void OnChangedGameState(GameState state)
         {

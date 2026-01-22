@@ -264,12 +264,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2873141433097206660, guid: f3879fe7e2d630a4f8c38b9bc1cba5a2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f3879fe7e2d630a4f8c38b9bc1cba5a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.55, y: 2.55}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -429,3 +429,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Engine::ThreeMatch.CellView
   cellRenderer: {fileID: 6452878155161209696}
   pieceRenderer: {fileID: 8568006695531285541}
+  portalRenderer: {fileID: 5263747286351247103}

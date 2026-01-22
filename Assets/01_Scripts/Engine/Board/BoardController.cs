@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,81 +11,126 @@ namespace ThreeMatch
     {
         private readonly List<CellController> _cellControllers = new();
         private StageData _stageData;
-        private BoardResolver _boardResolver;
-        private BoardView _boardView;
+        private BoardService _service;
+        private IBoardView _view;
         private Vector2 _accumulated;
+
+        private Coroutine _loopCoroutine = null;
+        private bool _isResolving;
+        private List<BoardCellData> _cellDatas;
+
+        private int _score;
+        private int _chainCount;
+
+        public event Action<int, int> OnScoreChanged;
+        public int Score => _score;
 
         public BoardController()
         {
             _stageData = Main.Instance.GetManager<StageManager>().GetCurrentStageData();
             AdjustCellData(_stageData, _cellControllers);
+            _cellDatas = _cellControllers.Select(x => x.Data).ToList();
+            _service = new BoardService(_stageData, _cellDatas);
+        }
 
-            if (Application.isPlaying)
-            {
-                _boardView = Main.Instance.GetManager<AssetManager>().GetInstantiateComponent<BoardView>(BundleGroup.defaultasset, nameof(BoardView));
-                CreateCellView(_boardView, _stageData);
-            }
-            _boardResolver = new BoardResolver(_stageData, _cellControllers.Select(x => x.Data).ToList());
+        public void SetBoardView(IBoardView boardView)
+        {
+            _view = boardView;
+
+            var cellView = _view.CreateCellView(_stageData, _cellDatas);
+
+            for (int i = 0; i < _cellControllers.Count; i++)
+                _cellControllers[i].SetCellView(cellView[i]);
         }
 
         private void AdjustCellData(StageData stageData, List<CellController> cellDataList)
         {
             _cellControllers?.Clear();
 
-            int totalCellCount = stageData.Width * stageData.Height;
+            int total = stageData.Width * stageData.Height;
+
             var fixedCellDatas = stageData.FixedCells;
-            Dictionary<int, StageFixedCellData> fixedCellIndices = new();
+            var fixedCellMap = new Dictionary<int, StageFixedCellData>();
 
             for (int i = 0; i < fixedCellDatas.Count; i++)
-                fixedCellIndices.Add(fixedCellDatas[i].Coord.ToIndex(stageData.Width), fixedCellDatas[i]);
+                fixedCellMap.Add(fixedCellDatas[i].Coord.ToIndex(stageData.Width), fixedCellDatas[i]);
 
             cellDataList?.Clear();
-            cellDataList.Capacity = totalCellCount;
+            cellDataList.Capacity = total;
 
-            for (int i = 0; i < totalCellCount; i++)
+            for (int i = 0; i < total; i++)
             {
                 BoardCellData cellData;
-                if (fixedCellIndices.ContainsKey(i))
+                if (fixedCellMap.TryGetValue(i, out var fixedCell))
                 {
-                    cellData = fixedCellIndices[i].ToBoardCellData(stageData.Width);
+                    cellData = fixedCell.ToBoardCellData(stageData.Width);
                 }
                 else
                 {
+                    int x = i % stageData.Width;
+                    int y = i / stageData.Width;
+
                     cellData = new()
                     {
                         CellID = i,
                         PieceType = PieceType.Normal,
                         CellType = CellType.Normal,
-                        ColorType = GetRandomColorType(),
+                        ColorType = PickColorNoInitialMatch(x, y, stageData, cellDataList),
                         Coordinate = new CellCoordinate(i % stageData.Width, i / stageData.Width)
                     };
                 }
 
-                CellController controller = new(cellData, OnDragMethod);
+                var controller = new CellController(cellData, OnDragMethod);
                 _cellControllers.Add(controller);
             }
 
-            fixedCellIndices.Clear();
-
-            ColorType GetRandomColorType()
-            {
-                var enumValues = Enum.GetValues(typeof(ColorType)).Length;
-                return (ColorType)UnityEngine.Random.Range((int)ColorType.Red, enumValues);
-            }
+            fixedCellMap.Clear();
         }
 
-        private void CreateCellView(BoardView boardRoot, StageData stageData)
+        private ColorType PickColorNoInitialMatch(int x, int y, StageData stageData, List<CellController> cellControllers)
         {
-            if (boardRoot == null)
-                return;
+            // 사용 가능한 컬러 목록 (None 제외)
+            var colors = Enum.GetValues(typeof(ColorType))
+                .Cast<ColorType>()
+                .Where(c => c != ColorType.None)
+                .ToList();
 
-            var dataList = _cellControllers.Select(x => x.Data).ToList();
-            var fixedCellList = stageData.FixedCells;
-            var cellView = boardRoot.CreateCellView(dataList, stageData.Width, stageData.Height);
+            var banned = new HashSet<ColorType>();
 
-            for (int i = 0; i < _cellControllers.Count; i++)
-                _cellControllers[i].SetCellView(cellView[i]);
+            int w = stageData.Width;
+
+            // 왼쪽 2칸 체크
+            if (x >= 2)
+            {
+                var c1 = cellControllers[(x - 1) + y * w].Data;
+                var c2 = cellControllers[(x - 2) + y * w].Data;
+
+                if (c1.PieceType == PieceType.Normal && c2.PieceType == PieceType.Normal &&
+                    c1.ColorType != ColorType.None && c1.ColorType == c2.ColorType)
+                {
+                    banned.Add(c1.ColorType);
+                }
+            }
+
+            // 아래 2칸 체크 (좌하단이 0,0 이므로 y-1, y-2)
+            if (y >= 2)
+            {
+                var c1 = cellControllers[x + (y - 1) * w].Data;
+                var c2 = cellControllers[x + (y - 2) * w].Data;
+
+                if (c1.PieceType == PieceType.Normal && c2.PieceType == PieceType.Normal &&
+                    c1.ColorType != ColorType.None && c1.ColorType == c2.ColorType)
+                {
+                    banned.Add(c1.ColorType);
+                }
+            }
+
+            var candidates = colors.Where(c => !banned.Contains(c)).ToList();
+            if (candidates.Count == 0) candidates = colors;
+
+            return candidates[UnityEngine.Random.Range(0, candidates.Count)];
         }
+
 
         public void OnDragMethod(Vector2 delta, BoardCellData data)
         {
@@ -96,109 +142,128 @@ namespace ThreeMatch
                 return;
 
             SwapDirection dir;
-            if (_accumulated.x < -threadHold)
-                dir = SwapDirection.Left;
-            else if (_accumulated.x > threadHold)
-                dir = SwapDirection.Right;
-            else if (_accumulated.y < -threadHold)
-                dir = SwapDirection.Down;
-            else
-                dir = SwapDirection.Up;
+            if (_accumulated.x < -threadHold) dir = SwapDirection.Left;
+            else if (_accumulated.x > threadHold) dir = SwapDirection.Right;
+            else if (_accumulated.y < -threadHold) dir = SwapDirection.Down;
+            else dir = SwapDirection.Up;
 
-            StartMove(dir, data);
             _accumulated = Vector2.zero;
-        }
 
-        public void StartMove(SwapDirection dir, BoardCellData data)
-        {
             if (GameUtility.IsValidDirection(_stageData.Width, _stageData.Height, data.Coordinate, dir))
-                MoveTo(dir, data);
+                Request(new SwapRequest(data, dir));
             else
-                CellviewShake(data.CellID);
+                Request(new ShakeRequest(data.CellID));
         }
 
-        private async Task CellviewShake(int cellID)
+        public void Request(IResolveRequest request)
         {
-            Main.Instance.GetManager<GameManager>().RaycastEnabled(false);
-            await _cellControllers[cellID].ShakeCellView();
-            Main.Instance.GetManager<GameManager>().RaycastEnabled(true);
+            // 체인 초기화
+            if (request != null && request.Type == ResolveRequestType.Swap)
+                _chainCount = 0;
+
+            _service.Request(request);
+            EnsureResolveLoopRunning();
         }
 
-        public async Task MoveTo(SwapDirection dir, BoardCellData data)
+        private void EnsureResolveLoopRunning()
+        {
+            if (_isResolving) return;
+
+            _isResolving = true;
+            _loopCoroutine = CoroutineHandler.Instance.StartCoroutine(ResolveLoop());
+        }
+
+        private void AddScore(int add)
+        {
+            if (add <= 0) return;
+            _score += add;
+            OnScoreChanged?.Invoke(_score, add);
+        }
+
+
+        private int CalcScoreAndAdvanceChain(IReadOnlyList<BoardChange> changes)
+        {
+            if (changes == null || changes.Count == 0) return 0;
+
+            int add = 0;
+
+            for (int i = 0; i < changes.Count; i++)
+            {
+                if (changes[i] is RemoveChange rm)
+                {
+                    int perCell = 100 + (100 * _chainCount);   // 요구사항 그대로
+                    add += rm.CellIDs.Count * perCell;
+
+                    _chainCount++; // 제거 1번 = 체인 1 증가
+                }
+            }
+
+            return add;
+        }
+
+
+        private IEnumerator ResolveLoop()
         {
             try
             {
                 Main.Instance.GetManager<GameManager>().RaycastEnabled(false);
-                var dirData = GetDirData(dir, data);
-                if (dirData != null)
+
+                const int maxSteps = 500;
+
+                for (int step = 0; step < maxSteps; step++)
                 {
-                    int fromIdx = data.Coordinate.ToIndex(_stageData.Width);
-                    int toIdx = dirData.Coordinate.ToIndex(_stageData.Width);
+                    if (!_service.TryResolveNext(out var changes))
+                        break;
 
-                    bool cellviewExist = _cellControllers[fromIdx].CellView != null && _cellControllers[toIdx].CellView != null;
-                    if (cellviewExist)
+                    if (changes == null || changes.Count == 0)
+                        continue;
+
+                    int scoreAdd = CalcScoreAndAdvanceChain(changes);
+
+                    if (_view != null)
                     {
-                        Task t1 = _cellControllers[fromIdx].CellView.MoveTo(dir);
-                        Task t2 = _cellControllers[toIdx].CellView.MoveTo(dir.Reverse());
-                        await Task.WhenAll(t1, t2);
+                        Task t = _view.Resolve(changes);
+                        yield return WaitTask(t);
                     }
 
-                    if (TrySwap(dir, data))
-                    {
-                        await Task.CompletedTask;
-                    }
-                    else
-                    {
-                        Task t1 = _cellControllers[fromIdx].CellView.MoveTo(dir.Reverse());
-                        Task t2 = _cellControllers[toIdx].CellView.MoveTo(dir);
-                        await Task.WhenAll(t1, t2);
-                    }
+                    AddScore(scoreAdd);
                 }
             }
             finally
             {
                 Main.Instance.GetManager<GameManager>().RaycastEnabled(true);
+                _isResolving = false;
+                _loopCoroutine = null;
             }
         }
 
-        public bool TrySwap(SwapDirection dir, BoardCellData data)
+        private static IEnumerator WaitTask(Task task)
         {
-            if (!GameUtility.IsValidDirection(_stageData.Width, _stageData.Height, data.Coordinate, dir))
-                return false;
+            if (task == null) yield break;
 
-            var dirData = GetDirData(dir, data);
-            int fromIdx = data.Coordinate.ToIndex(_stageData.Width);
-            int toIdx = dirData.Coordinate.ToIndex(_stageData.Width);
-            _cellControllers[fromIdx].Data.Swap(_cellControllers[toIdx].Data);
+            while (!task.IsCompleted)
+                yield return null;
 
-            _cellControllers[fromIdx].UpdateCellView();
-            _cellControllers[toIdx].UpdateCellView();
-            return true;
-        }
-
-        public BoardCellData GetDirData(SwapDirection dir, BoardCellData data)
-        {
-            var dataIndex = data.CellID;
-
-            return dir switch
-            {
-                SwapDirection.Left => _cellControllers[dataIndex - 1].Data,
-                SwapDirection.Right => _cellControllers[dataIndex + 1].Data,
-                SwapDirection.Up => _cellControllers[dataIndex + _stageData.Width].Data,
-                SwapDirection.Down => _cellControllers[dataIndex - _stageData.Width].Data,
-                _ => null
-            };
+            if (task.IsFaulted && task.Exception != null)
+                Debug.LogException(task.Exception);
         }
 
         public void Dispose()
         {
-            _cellControllers?.Clear();
+            _cellControllers.Clear();
             _stageData = null;
-            _boardResolver?.Dispose();
-            _boardResolver = null;
-            if (_boardView != null)
-                UnityEngine.Object.Destroy(_boardView.gameObject);
-            _boardView = null;
+
+            _service?.Dispose();
+            _service = null;
+
+            _view?.Dispose();
+            _view = null;
+
+            if (_loopCoroutine != null && CoroutineHandler.Instance != null)
+                CoroutineHandler.Instance.StopCoroutine(_loopCoroutine);
+
+            _loopCoroutine = null;
+            _isResolving = false;
         }
     }
 }

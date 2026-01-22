@@ -10,8 +10,7 @@ namespace ThreeMatch
         public void SetCellType(CellType cellType);
         public void SetPieceType(PieceType pieceType, ColorType colorType = ColorType.None);
         /// <summary>If InValid Move.</summary>
-        public Task Shake();
-        /// <returns>Move Duration</returns>
+        public Task Shake(float duration = 0.25f, float strength = 0.10f);
         public Task MoveTo(SwapDirection direction);
     }
 }

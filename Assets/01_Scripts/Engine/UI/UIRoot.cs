@@ -6,7 +6,6 @@ namespace ThreeMatch
     {
         private AssetManager _assetManager;
         private TitleCanvas _titleCanvas;
-        private BoardController _boardController;
         private GameObject TopPanelCanvas;
         public Transform PopupRoot { get; private set; }
 
@@ -30,12 +29,6 @@ namespace ThreeMatch
             if (sceneType != SceneType.Main && TopPanelCanvas != null)
                 Destroy(TopPanelCanvas);
 
-            if (sceneType != SceneType.Game && _boardController != null)
-            {
-                _boardController?.Dispose();
-                _boardController = null;
-            }
-
             switch (sceneType)
             {
                 case SceneType.Empty:
@@ -47,7 +40,7 @@ namespace ThreeMatch
                     _assetManager.GetPrefabInstance(BundleGroup.defaultasset, "StageRoot");
                     break;
                 case SceneType.Game:
-                    _boardController = new BoardController();
+                    
                     break;
             }
         }

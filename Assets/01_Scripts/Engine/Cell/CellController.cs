@@ -11,8 +11,6 @@ namespace ThreeMatch
 
         private Action<Vector2, BoardCellData> _onDrag;
 
-        public int RaycastOrder => 1;
-
         public CellController(BoardCellData data, Action<Vector2, BoardCellData> onDragAction)
         {
             Data = data;

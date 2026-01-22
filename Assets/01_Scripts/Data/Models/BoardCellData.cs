@@ -13,7 +13,7 @@ namespace ThreeMatch
 
         public bool Equals(BoardCellData other) => CellID == other.CellID;
 
-        public void Swap(BoardCellData other)
+        public void SwapPiece(BoardCellData other)
         {
             var color = this.ColorType;
             var piece = this.PieceType;
