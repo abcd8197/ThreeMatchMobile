@@ -9,7 +9,7 @@ namespace ThreeMatch
         {
             List<StageData> result = new();
             Dictionary<string, List<StageFixedCellData>> fixedCellSetDict = fixedCellDatas.ToDictionary(x => x.Key, x => x.Cells);
-            Dictionary<string, StageGoalData> goalDataDict = goalData.ToDictionary(x => x.Key, x => new StageGoalData(x.GoalType, x.GoalValue, x.TargetColor, x.TargetPieceType));
+            Dictionary<string, StageGoalData> goalDataDict = goalData.ToDictionary(x => x.Key, x => new StageGoalData(x.Key,x.GoalType, x.GoalValue, x.TargetColor, x.TargetPieceType));
             Dictionary<string, StageSpawnRuleData> ruleDataDict = ruleDatas.ToDictionary(x => x.Key, x => x);
 
             foreach (var metaData in stageMetas)

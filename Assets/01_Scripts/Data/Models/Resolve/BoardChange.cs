@@ -52,16 +52,23 @@ namespace ThreeMatch
     #endregion
 
     #region ## Remove / Spawn ##
+
+    public readonly struct RemovedCellInfo
+    {
+        public readonly int CellId;
+        public readonly PieceType PieceType;
+        public readonly ColorType ColorType;
+        public RemovedCellInfo(int id, PieceType pt, ColorType ct)
+        {
+            CellId = id; PieceType = pt; ColorType = ct;
+        }
+    }
     [Serializable]
     public sealed class RemoveChange : BoardChange
     {
-        public IReadOnlyList<int> CellIDs { get; }
-
-        public RemoveChange(IReadOnlyList<int> cellIds)
-            : base(ResolveState.Removed)
-        {
-            CellIDs = cellIds ?? Array.Empty<int>();
-        }
+        public IReadOnlyList<RemovedCellInfo> Removed { get; }
+        public RemoveChange(List<RemovedCellInfo> removed) : base(ResolveState.Removed)
+            => Removed = removed;
     }
 
     [Serializable]

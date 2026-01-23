@@ -182,8 +182,8 @@ namespace ThreeMatch
                 return changes;
             }
 
-            ApplyRemove(_matched);
-            changes.Add(new RemoveChange(_matched));
+            var removed = ApplyRemoveAndCollect(_matched);
+            changes.Add(new RemoveChange(removed));
 
             _phase = ResolvePhase.Gravity;
             return changes;
@@ -235,11 +235,34 @@ namespace ThreeMatch
                 return _emptyChanges;
             }
 
-            ApplyRemove(_matched);
-            changes.Add(new RemoveChange(_matched));
+            var removed = ApplyRemoveAndCollect(_matched);
+            changes.Add(new RemoveChange(removed));
 
             _phase = ResolvePhase.Gravity;
             return changes;
+        }
+
+        private List<RemovedCellInfo> ApplyRemoveAndCollect(List<int> matchedCellIds)
+        {
+            var removed = new List<RemovedCellInfo>(matchedCellIds.Count);
+
+            for (int i = 0; i < matchedCellIds.Count; i++)
+            {
+                int id = matchedCellIds[i];
+                if (!IsValidCellId(id)) continue;
+
+                var c = _cells[id];
+
+                if (c.CellType == CellType.Hole) continue;
+                if (c.PieceType == PieceType.None) continue;
+
+                removed.Add(new RemovedCellInfo(id, c.PieceType, c.ColorType));
+
+                c.PieceType = PieceType.None;
+                c.ColorType = ColorType.None;
+            }
+
+            return removed;
         }
 
         private void ResetState()

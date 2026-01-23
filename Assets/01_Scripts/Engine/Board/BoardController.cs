@@ -20,11 +20,14 @@ namespace ThreeMatch
         private List<BoardCellData> _cellDatas;
 
         private int _score;
-        private int _chainCount;
+        private int _goalValue = 0;
+        private int _chainCount = 0;
         private GameManager _gameManager;
+        private MissionService _mission;
 
         public event Action<int, int> OnScoreChanged;
         public int Score => _score;
+        public int GoalValue => _goalValue;
 
         public BoardController(GameManager gameManager)
         {
@@ -34,6 +37,36 @@ namespace ThreeMatch
             _service = new BoardService(_stageData, _cellDatas);
             _gameManager = gameManager;
             _gameManager.SetMoveChance(_stageData.MoveLimit);
+
+            CreateMissionService();
+        }
+
+        private void CreateMissionService()
+        {
+            _mission = new MissionService(_stageData);
+            _mission.OnProgressChanged += OnMissionProgressChanged;
+            _mission.OnSuccess += OnSuccess;
+            _mission.OnFail += OnFail;
+        }
+
+        private void OnMissionProgressChanged(StageGoalData goal, int current)
+        {
+            _goalValue = current;
+        }
+
+
+        private void OnSuccess()
+        {
+            var uiManager = Main.Instance.GetManager<UIManager>();
+            uiManager.ShowPopup(PopupType.StageResultPopup);
+            uiManager.GetActivatePopup<StageResultPopup>(PopupType.StageResultPopup).SetResult(true);
+        }
+
+        private void OnFail()
+        {
+            var uiManager = Main.Instance.GetManager<UIManager>();
+            uiManager.ShowPopup(PopupType.StageResultPopup);
+            uiManager.GetActivatePopup<StageResultPopup>(PopupType.StageResultPopup).SetResult(false);
         }
 
         public void SetBoardView(IBoardView boardView)
@@ -92,9 +125,7 @@ namespace ThreeMatch
 
         private ColorType PickColorNoInitialMatch(int x, int y, StageData stageData, List<CellController> cellControllers)
         {
-            // 사용 가능한 컬러 목록 (None 제외)
             var colors = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Where(c => c != ColorType.None).ToList();
-
             var banned = new HashSet<ColorType>();
 
             int w = stageData.Width;
@@ -163,11 +194,16 @@ namespace ThreeMatch
 
         public void Request(IResolveRequest request)
         {
-            if (request != null && request.Type == ResolveRequestType.Swap)
+            if (request == null)
+                return;
+
+            if (request.Type == ResolveRequestType.Swap)
+            {
                 _chainCount = 0;
+                _gameManager.UseMoveChance();
+            }
 
             _service.Request(request);
-            _gameManager.UseMoveChance();
             EnsureResolveLoopRunning();
         }
 
@@ -199,7 +235,7 @@ namespace ThreeMatch
                 if (changes[i] is RemoveChange rm)
                 {
                     int perCell = 100 + (100 * _chainCount);
-                    add += rm.CellIDs.Count * perCell;
+                    add += rm.Removed.Count * perCell;
 
                     _chainCount++;
                 }
@@ -233,8 +269,17 @@ namespace ThreeMatch
                         yield return WaitTask(t);
                     }
 
-                    AddScore(scoreAdd);
+                    _mission.ApplyChanges(changes);
+
+                    if (scoreAdd > 0)
+                    {
+                        AddScore(scoreAdd);
+                        _mission.ApplyScore(scoreAdd);
+                    }
                 }
+
+                _mission.TryEnd(_gameManager.RemainMove);
+
             }
             finally
             {
@@ -244,9 +289,10 @@ namespace ThreeMatch
             }
         }
 
-        private static IEnumerator WaitTask(Task task)
+        private IEnumerator WaitTask(Task task)
         {
-            if (task == null) yield break;
+            if (task == null)
+                yield break;
 
             while (!task.IsCompleted)
                 yield return null;

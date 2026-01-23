@@ -122,11 +122,11 @@ namespace ThreeMatch
 
         private async Task PlayRemove(RemoveChange rm)
         {
-            var tasks = new List<Task>(rm.CellIDs.Count);
+            var tasks = new List<Task>(rm.Removed.Count);
 
-            for (int k = 0; k < rm.CellIDs.Count; k++)
+            for (int k = 0; k < rm.Removed.Count; k++)
             {
-                int id = rm.CellIDs[k];
+                int id = rm.Removed[k].CellId;
                 if (!TryGet(id, out var cv)) continue;
 
                 tasks.Add(cv.PlayRemove(0.12f));
@@ -134,8 +134,8 @@ namespace ThreeMatch
 
             await Task.WhenAll(tasks);
 
-            for (int k = 0; k < rm.CellIDs.Count; k++)
-                ApplyCellVisual(rm.CellIDs[k]);
+            for (int k = 0; k < rm.Removed.Count; k++)
+                ApplyCellVisual(rm.Removed[k].CellId);
         }
 
         private async Task PlayFallsRowBatched(IReadOnlyList<BoardChange> changes, int startIndex, int count)

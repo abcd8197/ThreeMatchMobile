@@ -15,6 +15,7 @@ namespace ThreeMatch
         public int RemainMove => _remainMove;
         public float GameSpeed { get; private set; } = 1f;
         public int GetScore => _boardController != null ? _boardController.Score : 0;
+        public int GoalValue => _boardController != null ? _boardController.GoalValue : 0;
 
         public GameManager()
         {
@@ -56,7 +57,10 @@ namespace ThreeMatch
         public void OnSceneChanged(SceneType sceneType)
         {
             if (sceneType != SceneType.Game)
+            {
                 _boardController?.Dispose();
+                _boardController = null;
+            }
 
             switch (sceneType)
             {
@@ -113,7 +117,11 @@ namespace ThreeMatch
         }
 
         public void SetMoveChance(int moveChance) => _remainMove = moveChance;
-        public void UseMoveChance() => _remainMove--;
+        public void UseMoveChance()
+        {
+            if (_remainMove > 0)
+                _remainMove--;
+        }
         #endregion
     }
 }

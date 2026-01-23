@@ -45,6 +45,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b422afc2c0a6a7e4ab564014e80ba53c
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/Popup/StageResultPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b4ba9ebf9bca3664cb1659936210da22
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/TopPanelCanvas.prefab
     m_ReadOnly: 0
