@@ -25,7 +25,7 @@ namespace ThreeMatch
 
             var gameManager = Main.Instance.GetManager<GameManager>();
             gameManager.RaycastEnabled(false);
-            txt_Score.text = gameManager.GetScore.ToString();
+            txt_Score.text = $"Score: {gameManager.GetScore}";
         }
 
         public override void Hide(Action<PopupBase> hideCompleteAction)

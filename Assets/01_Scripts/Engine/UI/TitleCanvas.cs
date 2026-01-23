@@ -9,6 +9,8 @@ namespace ThreeMatch
 {
     public class TitleCanvas : MonoBehaviour
     {
+        public Image img_Logo;
+
         [Header("Loading Panel")]
         public GameObject LoadingPanel;
         public Image LoadingIcon;
@@ -37,10 +39,14 @@ namespace ThreeMatch
             StartLoadingProgress();
             LoginPanel.SetActive(false);
             SetButtonMethods();
+
+            img_Logo.rectTransform.DOScale(1f, 2f).From(0.8f).SetEase(Ease.OutBounce);
         }
 
         private void OnDisable()
         {
+            if (DOTween.IsTweening(img_Logo.rectTransform))
+                img_Logo.rectTransform.DOKill();
             LoadingEnabled(false);
 
             if (_loadingProgressCoroutine != null)

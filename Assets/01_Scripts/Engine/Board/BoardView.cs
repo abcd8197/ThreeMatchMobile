@@ -7,6 +7,11 @@ namespace ThreeMatch
 {
     public sealed class BoardView : MonoBehaviour, IBoardView
     {
+        private const float SwapDuration = 0.15f;
+        private const float FallDuration = 0.1f;
+        private const float RemoveDuration = 0.1f;
+        private const float SpawnDuration = 0.1f;
+
         [SerializeField] private BoardGrid _grid;
 
         private IReadOnlyList<ICellView> _cellViews;
@@ -103,8 +108,8 @@ namespace ThreeMatch
             Vector3 toTarget = to.GetPieceAnchorWorldPosition();     // from이 갈 위치
 
             // swap은 서로 교환이니까 타겟을 반대로
-            Task t1 = from.MovePieceToWorld(toTarget, 0.15f);
-            Task t2 = to.MovePieceToWorld(fromTarget, 0.15f);
+            Task t1 = from.MovePieceToWorld(toTarget, SwapDuration);
+            Task t2 = to.MovePieceToWorld(fromTarget, SwapDuration);
 
             await Task.WhenAll(t1, t2);
 
@@ -129,7 +134,7 @@ namespace ThreeMatch
                 int id = rm.Removed[k].CellId;
                 if (!TryGet(id, out var cv)) continue;
 
-                tasks.Add(cv.PlayRemove(0.12f));
+                tasks.Add(cv.PlayRemove(RemoveDuration));
             }
 
             await Task.WhenAll(tasks);
@@ -180,7 +185,7 @@ namespace ThreeMatch
                         continue;
 
                     Vector3 target = to.GetPieceAnchorWorldPosition();
-                    tasks.Add(from.MovePieceToWorld(target, 0.12f));
+                    tasks.Add(from.MovePieceToWorld(target, FallDuration));
                 }
 
                 await Task.WhenAll(tasks);
@@ -205,7 +210,7 @@ namespace ThreeMatch
                 if (!TryGet(sp.CellID, out var cv)) continue;
 
                 ApplyCellVisual(sp.CellID);
-                tasks.Add(cv.PlaySpawn(0.12f));
+                tasks.Add(cv.PlaySpawn(SpawnDuration));
             }
 
             await Task.WhenAll(tasks);
