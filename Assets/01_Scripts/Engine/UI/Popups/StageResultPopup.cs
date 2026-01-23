@@ -25,7 +25,7 @@ namespace ThreeMatch
 
             var gameManager = Main.Instance.GetManager<GameManager>();
             gameManager.RaycastEnabled(false);
-            txt_Score.text = gameManager.GetScore.ToString();
+            txt_Score.text = $"Score: {gameManager.GetScore}";
         }
 
         public override void Hide(Action<PopupBase> hideCompleteAction)
@@ -39,7 +39,10 @@ namespace ThreeMatch
             txt_Result.text = result ? "스테이지 클리어" : "실패";
 
             if (result)
+            {
                 Main.Instance.GetManager<StageManager>().CurrentStageCleared();
+                Main.Instance.GetManager<SaveManager>().SaveData();
+            }
         }
 
         public void OnClickConfirm()

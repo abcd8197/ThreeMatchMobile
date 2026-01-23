@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 88.549614, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1743424953444725833
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2574cc3d7228c8949b36a823ac889feb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 57c0b5666a572d24e82d0d11ae01866a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -201,4 +201,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4433eeaf066631e48aa80aed708f53e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Engine::ThreeMatch.LoadingPopup
-  img_Tip: {fileID: 6712698902027322420}
+  img_Icon: {fileID: 6712698902027322420}
