@@ -1,0 +1,191 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: defaultasset_tex
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: defaultasset_tex
+  m_GUID: 19a31fb202f51dc46aead8b47706faa1
+  m_SerializeEntries:
+  - m_GUID: 039a3abf9d8436f4781fc3fcdc645249
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/cell_portal.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12d58a68b0b9cbd4a9d031c8c9994b82
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_ice_0.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17dff32fd830fcd479ddf4cfa04048fb
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_rainbow.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c5396c88531f3e468a3467356a61a72
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/cell_blocked.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2574cc3d7228c8949b36a823ac889feb
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/img_ui_home.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 275bef00fbbaae146981fde03e4c2c20
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_ice_1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 326035b7f7d35564c94dc338db330d75
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/greenBtnTapped.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 331236891f642f94bae91764aa244515
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_normal_purple.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36e240bd65b0c7d42b92107db64b7509
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/Stemina.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46ac623c0fd32bb428c6505328e793b3
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/Stage_Background.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5191bfb591aff5441a2b77cd7af8762b
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Atlas/defaultAtlas.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57c0b5666a572d24e82d0d11ae01866a
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_normal_red.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58b3e20877a59994baec5e5c5096db26
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/purpleBtnNormal.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5caf12c4e621e634caa1e7a646c67f1c
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_normal_blue.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fe2c7ee806b7cf428dd22f29b66e1b7
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/img_ui_setting.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 669995300df51334890962bf20683b1a
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/whiteBG.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f4e588966c3ece459b00ddab473ce6a
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_normal_yellow.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78b0dabc2e5c511488c3026fc3627da3
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_normal_green.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87077f29fffd7db468210fd3184e2300
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/cell_hole.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87878b6f482c69b469210292e913a7ce
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_rocket_col.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f8c2fc2369cbf343bfdb753e0ec6d24
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/Diamond.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9294298b142ac7b4484ac6911dd767b6
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_rocket_row.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1c90ac2734fc70429832d9052e7b329
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/borderCircle.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3ff014d696a7184a9f7cbab4734b23d
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Illust/board_Background.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca03b8b7211fee74d95d23a48895d8d3
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/piece_bomb.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd389e3c9cda89b41b04ef37b9d615c3
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/LineBomb.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d656f8231608e5e41a27655a1c56d16a
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/UI/blueBG.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3879fe7e2d630a4f8c38b9bc1cba5a2
+    m_Address: Assets/02_Bundles/DefaultBundle/Texture/Environment/cell_normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset_tex
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a1cb46f0b57f2c048aeaf32252ca4f50, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0a44be58a3b862e458672cac4b09a5db, type: 2}
+    - {fileID: 11400000, guid: 30034304e14479d4386ede4cc3570ee4, type: 2}

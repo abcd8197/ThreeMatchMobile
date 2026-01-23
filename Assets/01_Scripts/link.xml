@@ -1,0 +1,5 @@
+<linker>
+    <assembly fullname="ThreeMatch.Data" preserve="all"/>
+    <assembly fullname="ThreeMatch.Domain" preserve="all"/>
+    <assembly fullname="ThreeMatch.Engine" preserve="all"/>
+</linker>

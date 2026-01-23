@@ -1,0 +1,142 @@
+[
+  {
+    "Key": "0",
+    "StageId": 0,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 20,
+    "GoalSetKey": [
+      "Collect_Color_Red_20"
+    ],
+    "FixedCellSetKey": [
+      "TopSpawn"
+    ],
+    "SpawnRuleKey": "ThreeColor"
+  },
+  {
+    "Key": "1",
+    "StageId": 1,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 21,
+    "GoalSetKey": [
+      "Collect_Color_Green_20"
+    ],
+    "FixedCellSetKey": [
+      "TopSpawn"
+    ],
+    "SpawnRuleKey": "ThreeColor"
+  },
+  {
+    "Key": "2",
+    "StageId": 2,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 22,
+    "GoalSetKey": [
+      "Collect_Color_Blue_20"
+    ],
+    "FixedCellSetKey": [
+      "TopSpawn"
+    ],
+    "SpawnRuleKey": "ThreeColor"
+  },
+  {
+    "Key": "3",
+    "StageId": 3,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 23,
+    "GoalSetKey": [
+      "Collect_Color_Yellow_20"
+    ],
+    "FixedCellSetKey": [
+      "TopSpawn"
+    ],
+    "SpawnRuleKey": "FourColor"
+  },
+  {
+    "Key": "4",
+    "StageId": 4,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 24,
+    "GoalSetKey": [
+      "Collect_Color_Purple_20"
+    ],
+    "FixedCellSetKey": [
+      "TopSpawn"
+    ],
+    "SpawnRuleKey": "FourColor"
+  },
+  {
+    "Key": "5",
+    "StageId": 5,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 25,
+    "GoalSetKey": [
+      "Collect_Color_Red_20"
+    ],
+    "FixedCellSetKey": [
+      "Center_Cross"
+    ],
+    "SpawnRuleKey": "FourColor"
+  },
+  {
+    "Key": "6",
+    "StageId": 6,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 26,
+    "GoalSetKey": [
+      "Collect_Color_Green_20"
+    ],
+    "FixedCellSetKey": [
+      "Center_Cross"
+    ],
+    "SpawnRuleKey": "FiveColor"
+  },
+  {
+    "Key": "7",
+    "StageId": 7,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 27,
+    "GoalSetKey": [
+      "Collect_Color_Blue_20"
+    ],
+    "FixedCellSetKey": [
+      "Center_Cross"
+    ],
+    "SpawnRuleKey": "FiveColor"
+  },
+  {
+    "Key": "8",
+    "StageId": 8,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 28,
+    "GoalSetKey": [
+      "Collect_Color_Yellow_20"
+    ],
+    "FixedCellSetKey": [
+      "Center_Cross"
+    ],
+    "SpawnRuleKey": "FiveColor"
+  },
+  {
+    "Key": "9",
+    "StageId": 9,
+    "Width": 9,
+    "Height": 9,
+    "MoveLimit": 29,
+    "GoalSetKey": [
+      "Collect_Color_Purple_20"
+    ],
+    "FixedCellSetKey": [
+      "Center_Cross"
+    ],
+    "SpawnRuleKey": "FiveColor"
+  }
+]
