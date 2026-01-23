@@ -39,7 +39,10 @@ namespace ThreeMatch
             txt_Result.text = result ? "스테이지 클리어" : "실패";
 
             if (result)
+            {
                 Main.Instance.GetManager<StageManager>().CurrentStageCleared();
+                Main.Instance.GetManager<SaveManager>().SaveData();
+            }
         }
 
         public void OnClickConfirm()
