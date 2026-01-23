@@ -36,6 +36,8 @@ namespace ThreeMatch
             {
                 foreach (var enumValue in enumValues)
                     saveData.ItemSaveData.Items.Add(enumValue, 0);
+
+                saveData.ItemSaveData.Items[ItemType.Stemina] = 100;
             }
 
             foreach (var enumValue in enumValues)
