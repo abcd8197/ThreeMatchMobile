@@ -71,21 +71,24 @@ namespace ThreeMatch
                 if (changes[i] is FallChange)
                 {
                     int start = i;
-                    while (i < changes.Count && changes[i] is FallChange) i++;
+
+                    while (i < changes.Count && changes[i] is FallChange) 
+                        i++;
+
                     await PlayFallsRowBatched(changes, start, i - start);
                     continue;
                 }
 
-                // 연속 SpawnChange 구간 병렬
                 if (changes[i] is SpawnChange)
                 {
                     int start = i;
-                    while (i < changes.Count && changes[i] is SpawnChange) i++;
+                    while (i < changes.Count && changes[i] is SpawnChange) 
+                        i++;
+
                     await PlaySpawns(changes, start, i - start);
                     continue;
                 }
 
-                // 모르는 Change는 스킵
                 i++;
             }
         }
@@ -113,7 +116,7 @@ namespace ThreeMatch
         private async Task PlayShake(ShakeChange sh)
         {
             if (!TryGet(sh.CellID, out var cv)) return;
-            await cv.Shake(0.20f, 0.10f);
+            await cv.Shake();
             ApplyCellVisual(sh.CellID);
         }
 
@@ -126,7 +129,6 @@ namespace ThreeMatch
                 int id = rm.CellIDs[k];
                 if (!TryGet(id, out var cv)) continue;
 
-                // 제거 애니(축소/페이드) 후 동기화
                 tasks.Add(cv.PlayRemove(0.12f));
             }
 
@@ -143,13 +145,13 @@ namespace ThreeMatch
             int width = _stageData.Width;
             int height = _stageData.Height;
 
-            // y(행) -> FallChange 리스트
             var buckets = new Dictionary<int, List<FallChange>>(height);
 
             for (int n = 0; n < count; n++)
             {
                 var f = (FallChange)changes[startIndex + n];
-                int toY = f.ToCellID / width; // cellId==index 전제
+                int toY = f.ToCellID / width;
+
                 if (!buckets.TryGetValue(toY, out var list))
                 {
                     list = new List<FallChange>(8);
@@ -158,20 +160,17 @@ namespace ThreeMatch
                 list.Add(f);
             }
 
-            // 아래(0) -> 위로 한 줄씩
             for (int y = 0; y < height; y++)
             {
                 if (!buckets.TryGetValue(y, out var list) || list.Count == 0)
                     continue;
 
-                // 1) 타겟 셀 piece를 숨겨서 중복 렌더링 방지
                 for (int k = 0; k < list.Count; k++)
                 {
                     if (TryGet(list[k].ToCellID, out var to))
                         to.SetPieceVisible(false);
                 }
 
-                // 2) 같은 줄은 병렬 이동
                 var tasks = new List<Task>(list.Count);
 
                 for (int k = 0; k < list.Count; k++)
@@ -186,7 +185,6 @@ namespace ThreeMatch
 
                 await Task.WhenAll(tasks);
 
-                // 3) 이동 후 비주얼 정착
                 for (int k = 0; k < list.Count; k++)
                 {
                     var f = list[k];
@@ -206,10 +204,7 @@ namespace ThreeMatch
                 var sp = (SpawnChange)changes[startIndex + n];
                 if (!TryGet(sp.CellID, out var cv)) continue;
 
-                // 먼저 데이터 기준으로 sprite를 세팅해두고
                 ApplyCellVisual(sp.CellID);
-
-                // 스폰 팝 애니
                 tasks.Add(cv.PlaySpawn(0.12f));
             }
 

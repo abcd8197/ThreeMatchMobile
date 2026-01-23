@@ -21,16 +21,19 @@ namespace ThreeMatch
 
         private int _score;
         private int _chainCount;
+        private GameManager _gameManager;
 
         public event Action<int, int> OnScoreChanged;
         public int Score => _score;
 
-        public BoardController()
+        public BoardController(GameManager gameManager)
         {
             _stageData = Main.Instance.GetManager<StageManager>().GetCurrentStageData();
             AdjustCellData(_stageData, _cellControllers);
             _cellDatas = _cellControllers.Select(x => x.Data).ToList();
             _service = new BoardService(_stageData, _cellDatas);
+            _gameManager = gameManager;
+            _gameManager.SetMoveChance(_stageData.MoveLimit);
         }
 
         public void SetBoardView(IBoardView boardView)
@@ -90,16 +93,12 @@ namespace ThreeMatch
         private ColorType PickColorNoInitialMatch(int x, int y, StageData stageData, List<CellController> cellControllers)
         {
             // 사용 가능한 컬러 목록 (None 제외)
-            var colors = Enum.GetValues(typeof(ColorType))
-                .Cast<ColorType>()
-                .Where(c => c != ColorType.None)
-                .ToList();
+            var colors = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Where(c => c != ColorType.None).ToList();
 
             var banned = new HashSet<ColorType>();
 
             int w = stageData.Width;
 
-            // 왼쪽 2칸 체크
             if (x >= 2)
             {
                 var c1 = cellControllers[(x - 1) + y * w].Data;
@@ -112,21 +111,21 @@ namespace ThreeMatch
                 }
             }
 
-            // 아래 2칸 체크 (좌하단이 0,0 이므로 y-1, y-2)
             if (y >= 2)
             {
                 var c1 = cellControllers[x + (y - 1) * w].Data;
                 var c2 = cellControllers[x + (y - 2) * w].Data;
 
-                if (c1.PieceType == PieceType.Normal && c2.PieceType == PieceType.Normal &&
-                    c1.ColorType != ColorType.None && c1.ColorType == c2.ColorType)
+                if (c1.PieceType == PieceType.Normal && c2.PieceType == PieceType.Normal && c1.ColorType != ColorType.None && c1.ColorType == c2.ColorType)
                 {
                     banned.Add(c1.ColorType);
                 }
             }
 
             var candidates = colors.Where(c => !banned.Contains(c)).ToList();
-            if (candidates.Count == 0) candidates = colors;
+
+            if (candidates.Count == 0)
+                candidates = colors;
 
             return candidates[UnityEngine.Random.Range(0, candidates.Count)];
         }
@@ -142,26 +141,33 @@ namespace ThreeMatch
                 return;
 
             SwapDirection dir;
-            if (_accumulated.x < -threadHold) dir = SwapDirection.Left;
-            else if (_accumulated.x > threadHold) dir = SwapDirection.Right;
-            else if (_accumulated.y < -threadHold) dir = SwapDirection.Down;
-            else dir = SwapDirection.Up;
+            if (_accumulated.x < -threadHold)
+                dir = SwapDirection.Left;
+            else if (_accumulated.x > threadHold)
+                dir = SwapDirection.Right;
+            else if (_accumulated.y < -threadHold)
+                dir = SwapDirection.Down;
+            else
+                dir = SwapDirection.Up;
 
             _accumulated = Vector2.zero;
 
-            if (GameUtility.IsValidDirection(_stageData.Width, _stageData.Height, data.Coordinate, dir))
-                Request(new SwapRequest(data, dir));
-            else
-                Request(new ShakeRequest(data.CellID));
+            if (_gameManager.RemainMove > 0)
+            {
+                if (GameUtility.IsValidDirection(_stageData.Width, _stageData.Height, data.Coordinate, dir))
+                    Request(new SwapRequest(data, dir));
+                else
+                    Request(new ShakeRequest(data.CellID));
+            }
         }
 
         public void Request(IResolveRequest request)
         {
-            // 체인 초기화
             if (request != null && request.Type == ResolveRequestType.Swap)
                 _chainCount = 0;
 
             _service.Request(request);
+            _gameManager.UseMoveChance();
             EnsureResolveLoopRunning();
         }
 
@@ -175,7 +181,8 @@ namespace ThreeMatch
 
         private void AddScore(int add)
         {
-            if (add <= 0) return;
+            if (add <= 0)
+                return;
             _score += add;
             OnScoreChanged?.Invoke(_score, add);
         }
@@ -191,10 +198,10 @@ namespace ThreeMatch
             {
                 if (changes[i] is RemoveChange rm)
                 {
-                    int perCell = 100 + (100 * _chainCount);   // 요구사항 그대로
+                    int perCell = 100 + (100 * _chainCount);
                     add += rm.CellIDs.Count * perCell;
 
-                    _chainCount++; // 제거 1번 = 체인 1 증가
+                    _chainCount++;
                 }
             }
 
@@ -264,6 +271,8 @@ namespace ThreeMatch
 
             _loopCoroutine = null;
             _isResolving = false;
+
+            _gameManager = null;
         }
     }
 }

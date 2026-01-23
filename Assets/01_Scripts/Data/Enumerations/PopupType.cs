@@ -5,5 +5,6 @@ namespace ThreeMatch
         None,
         SceneChangePopup,
         StageEnterPopup,
+        GameSettingPopup,
     }
 }

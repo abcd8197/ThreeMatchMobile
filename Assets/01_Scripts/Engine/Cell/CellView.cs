@@ -9,6 +9,7 @@ namespace ThreeMatch
     {
         [SerializeField] private SpriteRenderer cellRenderer;
         [SerializeField] private SpriteRenderer pieceRenderer;
+        [SerializeField] private SpriteRenderer portalRenderer;
 
         private Action<float, float> _onDrag;
         public int RaycastOrder => 3;
@@ -22,8 +23,8 @@ namespace ThreeMatch
         {
             cellRenderer.enabled = cellType != CellType.Hole;
             if (cellType != CellType.Hole)
-                cellRenderer.sprite = Main.Instance.GetManager<AssetManager>()
-                    .GetSprite(BundleGroup.defaultasset_tex, "defaultAtlas", cellType.GetImageName());
+                cellRenderer.sprite = Main.Instance.GetManager<AssetManager>().GetSprite(BundleGroup.defaultasset_tex, "defaultAtlas", cellType.GetImageName());
+            portalRenderer.enabled = cellType == CellType.PortarIn || cellType == CellType.PortarOut;
         }
 
         public void SetPieceType(PieceType pieceType, ColorType colorType = ColorType.None)
@@ -44,10 +45,11 @@ namespace ThreeMatch
                 }
             }
 
-            // 정착 상태
             pieceRenderer.transform.localPosition = Vector3.zero;
             pieceRenderer.transform.localScale = Vector3.one;
-            var c = pieceRenderer.color; c.a = 1f; pieceRenderer.color = c;
+            var c = pieceRenderer.color; 
+            c.a = 1f; 
+            pieceRenderer.color = c;
         }
 
         public void SetPosition(float x, float y)
@@ -55,12 +57,9 @@ namespace ThreeMatch
             transform.localPosition = new Vector2(x, y);
         }
 
-        // ===== BoardView에서 캐스팅해서 쓰는 연출 API =====
 
         public Vector3 GetPieceAnchorWorldPosition()
         {
-            // "이 셀의 piece가 정착해야 하는 월드 위치"
-            // (pieceRenderer.localPosition=0 이라면, 부모=PieceView의 원점이 곧 앵커)
             return pieceRenderer.transform.parent.TransformPoint(Vector3.zero);
         }
 
@@ -78,7 +77,7 @@ namespace ThreeMatch
         public Task PlayRemove(float duration = 0.14f)
         {
             Tween tScale = pieceRenderer.transform.DOScale(0f, duration).SetEase(Ease.InBack).SetRecyclable(true);
-            Tween tAlpha = TweenAlpha(0f, duration);
+            Tween tAlpha = TweenPieceAlpha(0f, duration);
 
             return AwaitTween(DOTween.Sequence().Join(tScale).Join(tAlpha));
         }
@@ -89,12 +88,12 @@ namespace ThreeMatch
             var c = pieceRenderer.color; c.a = 0f; pieceRenderer.color = c;
 
             Tween tScale = pieceRenderer.transform.DOScale(1f, duration).SetEase(Ease.OutBack).SetRecyclable(true);
-            Tween tAlpha = TweenAlpha(1f, duration);
+            Tween tAlpha = TweenPieceAlpha(1f, duration);
 
             return AwaitTween(DOTween.Sequence().Join(tScale).Join(tAlpha));
         }
 
-        private Tween TweenAlpha(float targetA, float duration)
+        private Tween TweenPieceAlpha(float targetA, float duration)
         {
             return DOTween.To(
                 () => pieceRenderer.color.a,
@@ -111,7 +110,8 @@ namespace ThreeMatch
 
         private static Task AwaitTween(Tween tween)
         {
-            if (tween == null) return Task.CompletedTask;
+            if (tween == null) 
+                return Task.CompletedTask;
 
             var tcs = new TaskCompletionSource<bool>();
             tween.OnComplete(() => tcs.TrySetResult(true));
@@ -124,10 +124,8 @@ namespace ThreeMatch
 
         public Task MoveTo(SwapDirection direction)
         {
-            // "상대 이동"으로 수정
             const float duration = 0.15f;
-            // BoardGrid delta와 일치
-            const float step = 0.5f; 
+            const float step = 0.5f;
 
             Vector3 delta = direction switch
             {
@@ -150,12 +148,16 @@ namespace ThreeMatch
             return AwaitTween(t);
         }
 
-        // ===== IRaycastable =====
+        #region ## IRaycastable ##
         public void OnBeginDrag() { }
         public void OnDrag(Vector2 delta) => _onDrag?.Invoke(delta.x, delta.y);
         public void OnEndDrag() { }
         public void OnPointerClick() { }
-        public void OnPointerDown() { }
+        public void OnPointerDown() 
+        { 
+
+        }
         public void OnPointerUp() { }
+        #endregion
     }
 }

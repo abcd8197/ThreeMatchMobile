@@ -5,6 +5,15 @@ namespace ThreeMatch
 {
     public sealed class BoardService : IDisposable
     {
+        private enum ResolvePhase
+        {
+            Idle = 0,
+            MatchCheckAfterSwap = 1,
+            Gravity = 2,
+            Spawn = 3,
+            MatchCheckStable = 4,
+
+        }
         private readonly Queue<IResolveRequest> _requests = new();
 
         private readonly StageData _stageData;
@@ -16,17 +25,18 @@ namespace ThreeMatch
         private readonly Random _rng = new Random();
         private readonly bool[] _marked;
 
-        // ===== Step machine state =====
         private ResolvePhase _phase = ResolvePhase.Idle;
 
         private int _swapFromId;
         private int _swapToId;
         private SwapDirection _swapDir;
 
-        private List<int> _matched; // 현재 라운드 매치 결과
+        private List<int> _matched;
 
         private int _chainGuard;
         private const int ChainGuardMax = 500;
+
+        private static readonly List<BoardChange> _emptyChanges = new(0);
 
         public BoardService(StageData stageData, List<BoardCellData> cells)
         {
@@ -45,51 +55,41 @@ namespace ThreeMatch
             _requests.Enqueue(request);
         }
 
-        /// <summary>
-        /// "한 스텝"만 진행하고 그 스텝에서 발생한 change들을 반환.
-        /// 더 진행할 게 없으면 false.
-        /// </summary>
         public bool TryResolveNext(out List<BoardChange> changes)
         {
-            changes = s_Empty;
+            changes = _emptyChanges;
 
-            // 안전 가드
             if (_phase != ResolvePhase.Idle && _chainGuard++ >= ChainGuardMax)
             {
-                // 가드 초과 시 강제 종료
                 ResetState();
                 return false;
             }
 
-            // Idle이면 새 요청 시작
             if (_phase == ResolvePhase.Idle)
             {
                 if (_requests.Count == 0) return false;
 
                 var req = _requests.Dequeue();
-                if (req == null) return false;
+                if (req == null) 
+                    return false;
 
                 if (req.Type == ResolveRequestType.Shake)
                 {
                     var sh = (ShakeRequest)req;
                     changes = new List<BoardChange>(1) { new ShakeChange(sh.CellId) };
-                    // 상태는 Idle 유지
                     return true;
                 }
 
                 if (req.Type != ResolveRequestType.Swap)
                     return false;
 
-                // Swap 요청을 "스텝 머신"에 올리기
                 var swapReq = (SwapRequest)req;
                 if (!BeginSwapRequest(swapReq, out changes))
                 {
-                    // BeginSwapRequest가 ShakeChange 등을 changes로 채워줌
                     ResetState();
                     return changes.Count > 0;
                 }
 
-                // 첫 스텝은 Swap Applied만 리턴하고 다음 스텝으로 넘어감
                 _phase = ResolvePhase.MatchCheckAfterSwap;
                 return true;
             }
@@ -162,7 +162,6 @@ namespace ThreeMatch
             _swapToId = toId;
             _swapDir = req.Direction;
 
-            // Swap 적용(1스텝)
             SwapPieces(_swapFromId, _swapToId);
             changes.Add(new SwapChange(_swapFromId, _swapToId, _swapDir, SwapChangeKind.Applied));
 
@@ -170,7 +169,6 @@ namespace ThreeMatch
             return true;
         }
 
-        // === Step 2: 스왑 후 매치 검사 (없으면 revert / 있으면 remove로 진행) ===
         private List<BoardChange> Step_MatchCheckAfterSwap()
         {
             var changes = new List<BoardChange>(32);
@@ -178,14 +176,12 @@ namespace ThreeMatch
             _matched = FindMatches();
             if (_matched.Count == 0)
             {
-                // revert 1스텝
                 SwapPieces(_swapFromId, _swapToId);
                 changes.Add(new SwapChange(_swapFromId, _swapToId, _swapDir, SwapChangeKind.Reverted));
                 ResetState();
                 return changes;
             }
 
-            // 매치 있으면 제거 1스텝
             ApplyRemove(_matched);
             changes.Add(new RemoveChange(_matched));
 
@@ -193,10 +189,9 @@ namespace ThreeMatch
             return changes;
         }
 
-        // === Gravity: 한 번 호출에 "한 칸씩"만 이동한 결과 ===
         private List<BoardChange> Step_GravityOneStep()
         {
-            var falls = ApplyGravityOneStep(); // 당신이 이미 OneStep 버전 만들어둔 그대로 사용
+            var falls = ApplyGravityOneStep();
             var changes = new List<BoardChange>(falls.Count);
 
             if (falls.Count > 0)
@@ -204,16 +199,13 @@ namespace ThreeMatch
                 for (int i = 0; i < falls.Count; i++)
                     changes.Add(falls[i]);
 
-                // 여전히 Gravity phase 유지
                 return changes;
             }
 
-            // 더 이상 떨어질 게 없으면 Spawn으로
             _phase = ResolvePhase.Spawn;
-            return s_Empty;
+            return _emptyChanges;
         }
 
-        // === Spawn: Spawner에서만, 그리고 빈 칸만 ===
         private List<BoardChange> Step_SpawnFromSpawners()
         {
             var spawns = ApplySpawnOnlySpawner();
@@ -224,17 +216,14 @@ namespace ThreeMatch
                 for (int i = 0; i < spawns.Count; i++)
                     changes.Add(spawns[i]);
 
-                // 스폰했으니 다시 떨어질 수 있음
                 _phase = ResolvePhase.Gravity;
                 return changes;
             }
 
-            // 스폰도 없으면 안정 상태 → 매치 검사
             _phase = ResolvePhase.MatchCheckStable;
-            return s_Empty;
+            return _emptyChanges;
         }
 
-        // === 안정 상태에서 매치 검사: 있으면 remove, 없으면 종료 ===
         private List<BoardChange> Step_MatchCheckStable()
         {
             var changes = new List<BoardChange>(32);
@@ -243,13 +232,12 @@ namespace ThreeMatch
             if (_matched.Count == 0)
             {
                 ResetState();
-                return s_Empty;
+                return _emptyChanges;
             }
 
             ApplyRemove(_matched);
             changes.Add(new RemoveChange(_matched));
 
-            // 제거했으니 다시 중력
             _phase = ResolvePhase.Gravity;
             return changes;
         }
@@ -458,22 +446,9 @@ namespace ThreeMatch
 
         private ColorType RandomColorType()
         {
-            // None 제외하고 안전하게 랜덤
             var values = (ColorType[])Enum.GetValues(typeof(ColorType));
-            int count = 0;
-            for (int i = 0; i < values.Length; i++)
-                if (values[i] != ColorType.None) count++;
-
-            if (count <= 0) return ColorType.None;
-
-            int pick = _rng.Next(0, count);
-            for (int i = 0; i < values.Length; i++)
-            {
-                if (values[i] == ColorType.None) continue;
-                if (pick-- == 0) return values[i];
-            }
-
-            return ColorType.None;
+            int pick = _rng.Next((int)ColorType.Red, values.Length);
+            return values[pick];
         }
 
 
@@ -481,7 +456,7 @@ namespace ThreeMatch
         {
             var a = _cells[aId];
             var b = _cells[bId];
-            a.SwapPiece(b); // class라면 재대입 불필요
+            a.SwapPiece(b);
         }
 
         private void MovePiece(int fromId, int toId)
@@ -528,18 +503,7 @@ namespace ThreeMatch
 
         public void Dispose()
         {
-            _requests.Clear();
-        }
-
-        private static readonly List<BoardChange> s_Empty = new List<BoardChange>(0);
-
-        private enum ResolvePhase
-        {
-            Idle = 0,
-            MatchCheckAfterSwap = 1,
-            Gravity = 2,
-            Spawn = 3,
-            MatchCheckStable = 4,
+            _requests?.Clear();
         }
     }
 }

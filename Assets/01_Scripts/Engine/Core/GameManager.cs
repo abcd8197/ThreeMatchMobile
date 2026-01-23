@@ -10,7 +10,11 @@ namespace ThreeMatch
 
         private RaycastHandler _raycastHandler;
         private BoardController _boardController;
+
+        private int _remainMove = 0;
+        public int RemainMove => _remainMove;
         public float GameSpeed { get; private set; } = 1f;
+        public int GetScore => _boardController != null ? _boardController.Score : 0;
 
         public GameManager()
         {
@@ -81,12 +85,12 @@ namespace ThreeMatch
             IBoardView boardView = null;
             if (Application.isPlaying)
                 boardView = Main.Instance.GetManager<AssetManager>().GetInstantiateComponent<BoardView>(BundleGroup.defaultasset, "BoardView");
-            _boardController = new();
+            _boardController = new(this);
             _boardController.SetBoardView(boardView);
         }
 
 
-        private void OnChangedGameState(GameState state)
+        public void OnChangedGameState(GameState state)
         {
             foreach (var module in _gameNotifyModules.Values)
                 module?.OnChangedGameState(state);
@@ -107,6 +111,9 @@ namespace ThreeMatch
             foreach (var module in _gameNotifyModules.Values)
                 module?.OnChangedGameSpeed(GameSpeed);
         }
+
+        public void SetMoveChance(int moveChance) => _remainMove = moveChance;
+        public void UseMoveChance() => _remainMove--;
         #endregion
     }
 }

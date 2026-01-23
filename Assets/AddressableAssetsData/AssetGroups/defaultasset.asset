@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - defaultasset
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 705ddd5845921b54d851f146cc37e8ed
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/Popup/GameSettingPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7eb4fc0b8a642654d8e161fc022d0d82
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/Object/BoardView.prefab
     m_ReadOnly: 0
@@ -47,6 +53,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7699b7fce10e494bb7b35fd18f9171f
     m_Address: Assets/02_Bundles/DefaultBundle/Prefab/Object/BoardCell.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - defaultasset
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f38190a69ce90604e91e3b38170f1bce
+    m_Address: Assets/02_Bundles/DefaultBundle/Prefab/UI/GameSceneCanvas.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - defaultasset
