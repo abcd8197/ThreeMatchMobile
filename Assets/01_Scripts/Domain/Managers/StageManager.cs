@@ -40,6 +40,7 @@ namespace ThreeMatch
         #endregion
 
         #region ## API ##
+        public int GetStageDataCount() => _stageData.Count;
         public void CurrentStageCleared()
         {
             if (_saveData.CurrentStage > _saveData.MaxStage)

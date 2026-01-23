@@ -645,7 +645,7 @@ GameObject:
   - component: {fileID: 8409836386196515788}
   - component: {fileID: 2442899038281885940}
   m_Layer: 0
-  m_Name: txt_StageNumber
+  m_Name: txt_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

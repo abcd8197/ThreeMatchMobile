@@ -20,14 +20,13 @@ namespace ThreeMatch
         private List<BoardCellData> _cellDatas;
 
         private int _score;
-        private int _goalValue = 0;
         private int _chainCount = 0;
         private GameManager _gameManager;
         private MissionService _mission;
 
         public event Action<int, int> OnScoreChanged;
+        public event Action<StageGoalData, int> OnGoalDataChanged;
         public int Score => _score;
-        public int GoalValue => _goalValue;
 
         public BoardController(GameManager gameManager)
         {
@@ -51,7 +50,7 @@ namespace ThreeMatch
 
         private void OnMissionProgressChanged(StageGoalData goal, int current)
         {
-            _goalValue = current;
+            OnGoalDataChanged?.Invoke(goal, current);
         }
 
 
@@ -314,6 +313,9 @@ namespace ThreeMatch
 
             if (_loopCoroutine != null && CoroutineHandler.Instance != null)
                 CoroutineHandler.Instance.StopCoroutine(_loopCoroutine);
+
+            OnScoreChanged = null;
+            OnGoalDataChanged = null;
 
             _loopCoroutine = null;
             _isResolving = false;

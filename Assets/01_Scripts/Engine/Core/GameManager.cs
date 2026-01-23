@@ -15,7 +15,6 @@ namespace ThreeMatch
         public int RemainMove => _remainMove;
         public float GameSpeed { get; private set; } = 1f;
         public int GetScore => _boardController != null ? _boardController.Score : 0;
-        public int GoalValue => _boardController != null ? _boardController.GoalValue : 0;
 
         public GameManager()
         {
@@ -93,7 +92,6 @@ namespace ThreeMatch
             _boardController.SetBoardView(boardView);
         }
 
-
         public void OnChangedGameState(GameState state)
         {
             foreach (var module in _gameNotifyModules.Values)
@@ -105,6 +103,7 @@ namespace ThreeMatch
             foreach (var module in _gameNotifyModules.Values)
                 module?.OnGamePaused(paused);
         }
+
         #region ## API ##
         public void RaycastEnabled(bool enabled) => _raycastHandler.RaycastEnabled(enabled);
 
@@ -122,6 +121,18 @@ namespace ThreeMatch
             if (_remainMove > 0)
                 _remainMove--;
         }
+
+        public void SubscbireOnGoalValueChanged(Action<StageGoalData, int> method)
+        {
+            if (_boardController != null)
+                _boardController.OnGoalDataChanged += method;
+        }
+        public void UnSubscbireOnGoalValueChanged(Action<StageGoalData, int> method)
+        {
+            if (_boardController != null)
+                _boardController.OnGoalDataChanged -= method;
+        }
+
         #endregion
     }
 }

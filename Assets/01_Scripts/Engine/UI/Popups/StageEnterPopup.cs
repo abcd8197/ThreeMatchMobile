@@ -26,6 +26,16 @@ namespace ThreeMatch
 
         private void OnClickStart()
         {
+            var stageManger = Main.Instance.GetManager<StageManager>();
+            var stageDataMax = stageManger.GetStageDataCount();
+
+            if(stageManger.GetCurrentStage() >= stageDataMax)
+            {
+                // Stage 오픈 안됨
+                return;
+            }
+
+
             if (Main.Instance.GetManager<ItemManager>().GetItemCount(ItemType.Stemina) > 0)
             {
                 Main.Instance.GetManager<ItemManager>().UseItem(ItemType.Stemina, 1);

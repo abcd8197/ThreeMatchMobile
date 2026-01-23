@@ -14,6 +14,7 @@ namespace ThreeMatch
 
         private float ScrollSpeed = 7.0f;
         private SpriteRendererButton[] backgrounds;
+        private List<int> _loopCounts = new();
         private List<StageNode> stageNodes = new();
         private AssetManager _assetManager;
 
@@ -22,9 +23,6 @@ namespace ThreeMatch
         private float _maxY;
         private float _minY;
 
-        private int _loopCount;
-        private int _prevLoopCount;
-
         private void Awake()
         {
             _assetManager = Main.Instance.GetManager<AssetManager>();
@@ -32,7 +30,10 @@ namespace ThreeMatch
             CreateNodes();
 
             foreach (var background in backgrounds)
+            {
                 background.onDrag.AddListener(OnDragBackground);
+                _loopCounts.Add(0);
+            }
 
             CalculateWorldPosition();
         }
@@ -75,41 +76,46 @@ namespace ThreeMatch
             if (transform.position.y > _basicPosY)
                 transform.position = Vector3.up * _basicPosY;
 
+            bool hasChanged = false;
+
             foreach (var background in backgrounds)
             {
                 if (background.transform.position.y < _minY)
                 {
                     background.transform.position += Vector3.up * backgrounds.Length * _backgroundHeight;
-                    _loopCount++;
+                    _loopCounts[background.transform.GetSiblingIndex()]++;
+                    hasChanged = true;
                 }
                 else if (background.transform.position.y > _maxY)
                 {
                     background.transform.position -= Vector3.up * backgrounds.Length * _backgroundHeight;
-                    _loopCount--;
+                    _loopCounts[background.transform.GetSiblingIndex()]--;
+                    hasChanged = true;
                 }
             }
 
-            UpdateNodeData();
+            if (hasChanged)
+                UpdateNodeData();
         }
 
         private void UpdateNodeData()
         {
-            if (_prevLoopCount == _loopCount)
-                return;
-
             int stage = 0;
             int maxStage = Main.Instance.GetManager<StageManager>().GetMaxStage();
             int nodePerBackground = _nodeLocalPositions.Count;
             int backgroundCount = backgrounds.Length;
 
-            for (int i = 0; i < stageNodes.Count; i++)
+            for (int i = 0; i < backgroundCount; i++)
             {
-                stage = i + ((_loopCount + 1) / 3) * nodePerBackground * backgroundCount;
-                stage += 1;
-                stageNodes[i].SetData(stage, maxStage);
-            }
+                for (int j = 0; j < nodePerBackground; j++)
+                {
+                    int nodeIndex = (i * nodePerBackground) + j;
+                    stage = j + (i * nodePerBackground) + (_loopCounts[i] * nodePerBackground * backgroundCount);
+                    stage += 1;
 
-            _prevLoopCount = _loopCount;
+                    stageNodes[nodeIndex].SetData(stage, maxStage);
+                }
+            }
         }
     }
 }
