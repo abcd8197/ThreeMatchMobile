@@ -311,6 +311,9 @@ namespace ThreeMatch
             _view?.Dispose();
             _view = null;
 
+            _mission?.Dispose();
+            _mission = null;
+
             if (_loopCoroutine != null && CoroutineHandler.Instance != null)
                 CoroutineHandler.Instance.StopCoroutine(_loopCoroutine);
 
