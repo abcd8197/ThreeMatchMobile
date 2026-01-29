@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ThreeMatch
 {
-    public sealed class MissionService
+    public sealed class MissionService : IDisposable
     {
         private readonly StageData _stage;
         private readonly Dictionary<string, int> _progress = new();
@@ -23,10 +23,10 @@ namespace ThreeMatch
         public void Reset() => Init();
         public void ApplyScore(int deltaScore)
         {
-            if (_ended) 
+            if (_ended)
                 return;
 
-            if (deltaScore <= 0) 
+            if (deltaScore <= 0)
                 return;
 
             _score += deltaScore;
@@ -37,8 +37,8 @@ namespace ThreeMatch
             for (int i = 0; i < _stage.Goals.Count; i++)
             {
                 var g = _stage.Goals[i];
-                
-                if (g == null) 
+
+                if (g == null)
                     continue;
 
                 if (g.GoalType != StageGoalType.Score)
@@ -57,13 +57,13 @@ namespace ThreeMatch
 
         public void ApplyChanges(IReadOnlyList<BoardChange> changes)
         {
-            if (_ended) 
+            if (_ended)
                 return;
 
-            if (_stage.Goals == null || _stage.Goals.Count == 0) 
+            if (_stage.Goals == null || _stage.Goals.Count == 0)
                 return;
 
-            if (changes == null || changes.Count == 0) 
+            if (changes == null || changes.Count == 0)
                 return;
 
             for (int i = 0; i < changes.Count; i++)
@@ -83,7 +83,7 @@ namespace ThreeMatch
                     {
                         var goal = _stage.Goals[gIdx];
 
-                        if (goal == null) 
+                        if (goal == null)
                             continue;
 
 
@@ -112,7 +112,7 @@ namespace ThreeMatch
             {
                 var g = _stage.Goals[i];
 
-                if (g == null) 
+                if (g == null)
                     continue;
 
                 int cur = _progress.TryGetValue(g.Key, out var v) ? v : 0;
@@ -126,7 +126,7 @@ namespace ThreeMatch
 
         public void TryEnd(int remainMove)
         {
-            if (_ended) 
+            if (_ended)
                 return;
 
             if (IsCleared())
@@ -156,7 +156,7 @@ namespace ThreeMatch
             {
                 var g = _stage.Goals[i];
 
-                if (g == null) 
+                if (g == null)
                     continue;
 
                 _progress[g.Key] = (g.GoalType == StageGoalType.Score) ? _score : 0;
@@ -178,6 +178,14 @@ namespace ThreeMatch
                 return false;
 
             return true;
+        }
+
+        public void Dispose()
+        {
+            _progress?.Clear();
+            OnFail = null;
+            OnProgressChanged = null;
+            OnSuccess = null;
         }
     }
 }
