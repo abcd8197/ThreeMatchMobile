@@ -28,13 +28,14 @@ namespace ThreeMatch
 
             for (int i = 0; i < cellDatas.Count; i++)
             {
-                var cv = assetManager.GetInstantiateComponent<CellView>(
-                    BundleGroup.defaultasset, "BoardCell", parent: _grid.transform);
-
+                // CellView 인스턴스 생성
+                var cv = assetManager.GetInstantiateComponent<CellView>(BundleGroup.defaultasset, "BoardCell", parent: _grid.transform);
                 list.Add(cv);
             }
 
+            // 읽기 전용 CellView 리스트 보관
             _cellViews = list;
+            // CellView 위치 정렬
             _grid.SortGrid(list, stageData.Width, stageData.Height);
 
             // 최초 동기화
@@ -46,8 +47,10 @@ namespace ThreeMatch
 
         public async Task Resolve(IReadOnlyList<BoardChange> changes)
         {
-            if (changes == null || changes.Count == 0) return;
-            if (_cellViews == null || _cellDatas == null) return;
+            if (changes == null || changes.Count == 0) 
+                return;
+            if (_cellViews == null || _cellDatas == null) 
+                return;
 
             int i = 0;
             while (i < changes.Count)
@@ -145,7 +148,8 @@ namespace ThreeMatch
 
         private async Task PlayFallsRowBatched(IReadOnlyList<BoardChange> changes, int startIndex, int count)
         {
-            if (_stageData == null) return;
+            if (_stageData == null) 
+                return;
 
             int width = _stageData.Width;
             int height = _stageData.Height;
@@ -218,10 +222,12 @@ namespace ThreeMatch
 
         private void ApplyCellVisual(int cellId)
         {
-            if (cellId < 0 || cellId >= _cellDatas.Count) return;
+            if (cellId < 0 || cellId >= _cellDatas.Count) 
+                return;
 
             var data = _cellDatas[cellId];
-            if (!TryGet(cellId, out var cv)) return;
+            if (!TryGet(cellId, out var cv)) 
+                return;
 
             cv.SetCellType(data.CellType);
             cv.SetPieceType(data.PieceType, data.ColorType);
