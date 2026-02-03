@@ -48,11 +48,20 @@ namespace ThreeMatch
             _mission.OnFail += OnFail;
         }
 
+        public void SetBoardView(IBoardView boardView)
+        {
+            _view = boardView;
+
+            var cellView = _view.CreateCellView(_stageData, _cellDatas);
+
+            for (int i = 0; i < _cellControllers.Count; i++)
+                _cellControllers[i].SetCellView(cellView[i]);
+        }
+
         private void OnMissionProgressChanged(StageGoalData goal, int current)
         {
             OnGoalDataChanged?.Invoke(goal, current);
         }
-
 
         private void OnSuccess()
         {
@@ -66,16 +75,6 @@ namespace ThreeMatch
             var uiManager = Main.Instance.GetManager<UIManager>();
             uiManager.ShowPopup(PopupType.StageResultPopup);
             uiManager.GetActivatePopup<StageResultPopup>(PopupType.StageResultPopup).SetResult(false);
-        }
-
-        public void SetBoardView(IBoardView boardView)
-        {
-            _view = boardView;
-
-            var cellView = _view.CreateCellView(_stageData, _cellDatas);
-
-            for (int i = 0; i < _cellControllers.Count; i++)
-                _cellControllers[i].SetCellView(cellView[i]);
         }
 
         private void AdjustCellData(StageData stageData, List<CellController> cellDataList)

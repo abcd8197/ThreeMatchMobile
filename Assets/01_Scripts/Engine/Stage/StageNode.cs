@@ -9,10 +9,10 @@ namespace ThreeMatch
         [SerializeField] private SpriteRenderer sp_Back;
         public int RaycastOrder => 1;
         private int _stage;
-        public void SetData(int stage, int maxStage)
+        public void SetData(int stage, bool isEnterable)
         {
             _stage = stage;
-            sp_Back.color = stage <= maxStage ? Color.white : Color.gray;
+            sp_Back.color = isEnterable ? Color.white : Color.gray;
             txt_Stage.text = stage.ToString();
         }
 
