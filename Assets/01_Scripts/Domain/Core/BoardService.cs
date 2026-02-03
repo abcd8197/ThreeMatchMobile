@@ -15,6 +15,8 @@ namespace ThreeMatch
 
         }
 
+        private const int ChainGuardMax = 500;
+
         // 요청 큐
         private readonly Queue<IResolveRequest> _requests = new();
         // 데이터 참조
@@ -25,8 +27,6 @@ namespace ThreeMatch
         private readonly int _width;
         private readonly int _height;
         private readonly Random _rng = new Random();
-        // 매치 검사용 마킹 배열
-        private readonly bool[] _marked;
 
         // 페이즈 상태
         private ResolvePhase _phase = ResolvePhase.Idle;
@@ -39,8 +39,8 @@ namespace ThreeMatch
         private List<int> _matched;
         // 체인 가드(무한 루프 방지용)
         private int _chainGuard;
-        private const int ChainGuardMax = 500;
 
+        private readonly MatchFinder _matchFinder = new();
         // 빈 리스트
         private static readonly List<BoardChange> _emptyChanges = new(0);
 
@@ -50,7 +50,8 @@ namespace ThreeMatch
             _cells = cells ?? throw new ArgumentNullException(nameof(cells));
             _width = _stageData.Width;
             _height = _stageData.Height;
-            _marked = new bool[_cells.Count];
+
+            _matchFinder.SetData(cells, stageData.Width, stageData.Height);
         }
 
         /// <summary>Service 요청</summary>
@@ -190,7 +191,7 @@ namespace ThreeMatch
         {
             var changes = new List<BoardChange>(32);
 
-            _matched = FindMatches();
+            _matched = _matchFinder.FindMatches();
 
             // 매치된 셀이 없다면 되돌린 후 상황 종료
             if (_matched.Count == 0)
@@ -247,7 +248,7 @@ namespace ThreeMatch
         {
             var changes = new List<BoardChange>(32);
 
-            _matched = FindMatches();
+            _matched = _matchFinder.FindMatches();
             if (_matched.Count == 0)
             {
                 ResetState();
@@ -269,14 +270,14 @@ namespace ThreeMatch
             {
                 int id = matchedCellIds[i];
 
-                if (!IsValidCellId(id)) 
+                if (!IsValidCellId(id))
                     continue;
 
                 var c = _cells[id];
 
-                if (c.CellType == CellType.Hole) 
+                if (c.CellType == CellType.Hole)
                     continue;
-                if (c.PieceType == PieceType.None) 
+                if (c.PieceType == PieceType.None)
                     continue;
 
                 removed.Add(new RemovedCellInfo(id, c.PieceType, c.ColorType));
@@ -296,105 +297,6 @@ namespace ThreeMatch
             _swapDir = default;
             _matched = null;
             _chainGuard = 0;
-        }
-
-        /// <summary>현재 보드 데이터를 기준으로 매치된 CellId들을 찾는다</summary>
-        private List<int> FindMatches()
-        {
-            Array.Clear(_marked, 0, _marked.Length);
-
-            var result = new List<int>(32);
-
-            for (int y = 0; y < _height; y++)
-            {
-                int runStartX = 0;
-                int runLen = 1;
-
-                for (int x = 1; x < _width; x++)
-                {
-                    if (IsSameMatchKey(x - 1, y, x, y)) 
-                        runLen++;
-                    else
-                    {
-                        if (runLen >= 3) 
-                            MarkRunHorizontal(y, runStartX, runLen, result);
-
-                        runStartX = x;
-                        runLen = 1;
-                    }
-                }
-
-                if (runLen >= 3) 
-                    MarkRunHorizontal(y, runStartX, runLen, result);
-            }
-
-            for (int x = 0; x < _width; x++)
-            {
-                int runStartY = 0;
-                int runLen = 1;
-
-                for (int y = 1; y < _height; y++)
-                {
-                    if (IsSameMatchKey(x, y - 1, x, y)) 
-                        runLen++;
-                    else
-                    {
-                        if (runLen >= 3) 
-                            MarkRunVertical(x, runStartY, runLen, result);
-
-                        runStartY = y;
-                        runLen = 1;
-                    }
-                }
-
-                if (runLen >= 3) 
-                    MarkRunVertical(x, runStartY, runLen, result);
-            }
-
-            return result;
-        }
-
-        private bool IsSameMatchKey(int ax, int ay, int bx, int by)
-        {
-            int aId = ToId(ax, ay);
-            int bId = ToId(bx, by);
-
-            var a = _cells[aId];
-            var b = _cells[bId];
-
-            if (a.CellType == CellType.Hole || b.CellType == CellType.Hole) return false;
-            if (a.PieceType != PieceType.Normal || b.PieceType != PieceType.Normal) return false;
-            if (a.ColorType == ColorType.None || b.ColorType == ColorType.None) return false;
-
-            return a.ColorType == b.ColorType;
-        }
-
-        private void MarkRunHorizontal(int y, int startX, int len, List<int> result)
-        {
-            for (int i = 0; i < len; i++)
-            {
-                int id = ToId(startX + i, y);
-
-                if (_marked[id]) 
-                    continue;
-
-                _marked[id] = true;
-                result.Add(id);
-            }
-        }
-
-        private void MarkRunVertical(int x, int startY, int len, List<int> result)
-        {
-            for (int i = 0; i < len; i++)
-            {
-                int id = ToId(x, startY + i);
-
-                if (_marked[id]) 
-                    continue;
-
-                _marked[id] = true;
-                result.Add(id);
-            }
         }
 
         private List<FallChange> ApplyGravityOneStep()
@@ -550,6 +452,7 @@ namespace ThreeMatch
         public void Dispose()
         {
             _requests?.Clear();
+            _matchFinder?.Dispose();
         }
     }
 }

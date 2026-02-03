@@ -34,6 +34,11 @@ namespace ThreeMatch
                 // Stage 오픈 안됨
                 return;
             }
+            else if(!stageManger.IsEnterableStage(stageManger.GetCurrentStage()))
+            {
+                // 입장 불가
+                return;
+            }
 
 
             if (Main.Instance.GetManager<ItemManager>().GetItemCount(ItemType.Stemina) > 0)

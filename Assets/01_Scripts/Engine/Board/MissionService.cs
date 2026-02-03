@@ -10,7 +10,8 @@ namespace ThreeMatch
         private bool _ended;
         private int _score;
 
-        public event Action<StageGoalData, int> OnProgressChanged; // (goal, current, target)
+        /// <summary>(GoalData, CurrentValue)</summary>
+        public event Action<StageGoalData, int> OnProgressChanged;
         public event Action OnSuccess;
         public event Action OnFail;
 
@@ -145,7 +146,7 @@ namespace ThreeMatch
 
         private void Init()
         {
-            _progress.Clear();
+            _progress?.Clear();
             _ended = false;
             _score = 0;
 

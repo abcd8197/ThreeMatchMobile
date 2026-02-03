@@ -43,14 +43,14 @@ namespace ThreeMatch
         public int GetStageDataCount() => _stageData.Count;
         public void CurrentStageCleared()
         {
-            if (_saveData.CurrentStage > _saveData.MaxStage)
-                _saveData.MaxStage = _saveData.CurrentStage;
+            if (_saveData.CurrentStage >= _saveData.MaxStage)
+                _saveData.MaxStage = _saveData.CurrentStage + 1;
             _saveData.CurrentStage = 0;
         }
         public int GetMaxStage() => _saveData.MaxStage;
         public void SetCurrentStage(int stage) => _saveData.CurrentStage = stage;
         public int GetCurrentStage() => _saveData.CurrentStage;
-
+        public bool IsEnterableStage(int stageId) => stageId <= GetMaxStage();
 
         public StageData GetStageData(int stageId) => _stageData[stageId];
         public StageData GetCurrentStageData() => GetStageData(GetCurrentStage());
