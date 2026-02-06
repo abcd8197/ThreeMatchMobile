@@ -154,7 +154,7 @@ namespace ThreeMatch
 
             var candidates = new List<ColorType>();
 
-            for(int i = 0; i < colors.Count; i++)
+            for (int i = 0; i < colors.Count; i++)
             {
                 if (!banned.Contains(colors[i]))
                     candidates.Add(colors[i]);
@@ -320,7 +320,11 @@ namespace ThreeMatch
             _mission = null;
 
             if (_loopCoroutine != null && CoroutineHandler.Instance != null)
+            {
                 CoroutineHandler.Instance.StopCoroutine(_loopCoroutine);
+                if (Main.Instance != null)
+                    Main.Instance.GetManager<GameManager>().RaycastEnabled(true);
+            }
 
             OnScoreChanged = null;
             OnGoalDataChanged = null;
