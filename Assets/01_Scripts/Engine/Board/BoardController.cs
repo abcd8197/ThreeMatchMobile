@@ -92,6 +92,9 @@ namespace ThreeMatch
             cellDataList?.Clear();
             cellDataList.Capacity = total;
 
+            var colors = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Where(c => c != ColorType.None).ToList();
+            var bannedColors = new HashSet<ColorType>();
+
             for (int i = 0; i < total; i++)
             {
                 BoardCellData cellData;
@@ -109,7 +112,7 @@ namespace ThreeMatch
                         CellID = i,
                         PieceType = PieceType.Normal,
                         CellType = CellType.Normal,
-                        ColorType = PickColorNoInitialMatch(x, y, stageData, cellDataList),
+                        ColorType = PickColorNoInitialMatch(colors, bannedColors, x, y, stageData, cellDataList),
                         Coordinate = new CellCoordinate(i % stageData.Width, i / stageData.Width)
                     };
                 }
@@ -121,11 +124,9 @@ namespace ThreeMatch
             fixedCellMap.Clear();
         }
 
-        private ColorType PickColorNoInitialMatch(int x, int y, StageData stageData, List<CellController> cellControllers)
+        private ColorType PickColorNoInitialMatch(List<ColorType> colors, HashSet<ColorType> banned, int x, int y, StageData stageData, List<CellController> cellControllers)
         {
-            var colors = Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Where(c => c != ColorType.None).ToList();
-            var banned = new HashSet<ColorType>();
-
+            banned.Clear();
             int w = stageData.Width;
 
             if (x >= 2)
@@ -151,7 +152,13 @@ namespace ThreeMatch
                 }
             }
 
-            var candidates = colors.Where(c => !banned.Contains(c)).ToList();
+            var candidates = new List<ColorType>();
+
+            for(int i = 0; i < colors.Count; i++)
+            {
+                if (!banned.Contains(colors[i]))
+                    candidates.Add(colors[i]);
+            }
 
             if (candidates.Count == 0)
                 candidates = colors;
@@ -241,7 +248,6 @@ namespace ThreeMatch
 
             return add;
         }
-
 
         private IEnumerator ResolveLoop()
         {
